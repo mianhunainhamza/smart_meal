@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/food.dart';
-import '../../../widgets/food_card.dart';
-import '../../../widgets/quick_screen_appbar.dart';
+import '../widgets/food_card.dart';
+import '../widgets/quick_screen_appbar.dart';
 
 class QuickFoodsScreen extends StatefulWidget {
   const QuickFoodsScreen({super.key});

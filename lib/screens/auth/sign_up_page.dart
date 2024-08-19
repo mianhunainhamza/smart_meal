@@ -47,14 +47,24 @@ class _SignupPageState extends State<SignupScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 80),
-                        Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
+                        Row(
+                          children:[ Text(
+                            "Sign",
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2,
+                            ),
+                          ),Text(
+                            " Up",
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2,
+                            ),
+                          ),]
                         ),
                         const SizedBox(
                           height: 10,
@@ -245,6 +255,7 @@ class _SignupPageState extends State<SignupScreen>
                         SizedBox(height: mediaQuery.size.width * 0.01),
 
                         CustomButton(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           text: "SIGN UP",
                           icon: Icons.arrow_forward,
                           isLoading: false,
@@ -280,7 +291,7 @@ class _SignupPageState extends State<SignupScreen>
               child: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(1),
+                  color: Theme.of(context).colorScheme.primary.withOpacity(1),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();

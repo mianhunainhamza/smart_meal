@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
-import '../models/food.dart';
-import '../screens/home_screen/components/recipe_screen.dart';
+import '../../../models/food.dart';
+import '../components/recipe_screen.dart';
 
 class FoodCard extends StatelessWidget {
   final Food food;

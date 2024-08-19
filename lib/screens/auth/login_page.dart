@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_meal/screens/auth/sign_up_page.dart';
 import 'package:smart_meal/screens/inventory/inventory_screen.dart';
-import 'package:smart_meal/screens/main_screen.dart';
+import 'package:smart_meal/screens/bottom_navbar.dart';
 import '../../utils/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
@@ -173,6 +173,7 @@ class _LoginPageState extends State<LoginScreen>
                         });
                       }
                     },
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     isLoading: _isLoggingIn,
                     icon: Icons.arrow_forward,
                     tag: 'onboard',
@@ -227,6 +228,6 @@ class _LoginPageState extends State<LoginScreen>
 
   // Function to log in the user
   void loginUser() {
-    Get.to(const MainScreen());
+    Get.to(const BottomNavbar());
   }
 }

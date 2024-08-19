@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../models/food.dart';
-import '../screens/home_screen/components/quick_foods_screen.dart';
-import '../screens/home_screen/components/recipe_screen.dart';
+import '../../../models/food.dart';
+import '../components/quick_foods_screen.dart';
+import '../components/recipe_screen.dart';
+
 
 class QuickAndFastList extends StatelessWidget {
   const QuickAndFastList({super.key});

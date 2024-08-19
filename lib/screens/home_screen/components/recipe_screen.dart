@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
-import '../../../constants.dart';
 import '../../../models/food.dart';
-import '../../../widgets/food_counter.dart';
+import '../widgets/food_counter.dart';
 
 class RecipeScreen extends StatefulWidget {
   final Food food;
@@ -30,7 +28,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: kprimaryColor,
                   foregroundColor: Colors.white,
                 ),
                 child: const Text("Start Cooking"),

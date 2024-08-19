@@ -1,5 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_meal/screens/auth/login_page.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
 import 'components/on_boarding_card.dart';
 import 'components/on_boarding_data.dart';
@@ -28,7 +30,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             width: 10,
             margin: const EdgeInsets.all(30),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary,
               shape: BoxShape.circle,
             ),
           ),
@@ -63,10 +68,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 activeShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .onPrimary,
                 // Black color
                 activeColor:
-                    Theme.of(context).colorScheme.primary, // Primary color
+                Theme
+                    .of(context)
+                    .colorScheme
+                    .primary, // Primary color
               ),
             ),
           ),
@@ -96,8 +107,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             child: CustomButton(
               onPressed: () {
                 if (_currentIndex == onBoardinglist.length - 1) {
-                  // Handle the "Get Started" action
+                  Get.offAll(() => const LoginScreen(),transition: Transition.cupertino);
                 } else {
+                  // Continue to the next page
                   _pageController1.nextPage(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.fastOutSlowIn,
@@ -109,10 +121,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 }
               },
               text: _currentIndex == onBoardinglist.length - 1
-                  ? 'Get Started'
-                  : 'Next',
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              textColor: Theme.of(context).colorScheme.onPrimary, isLoading: false, tag: 'onboard',
+            ? 'Get Started'
+              : 'Next',
+              backgroundColor: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary,
+              textColor: Theme
+                  .of(context)
+                  .colorScheme
+                  .onPrimary, isLoading: false, tag: 'onboard',
               // White color
             ),
           ),

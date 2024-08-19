@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
-import '../models/category.dart';
+import '../../../models/category.dart';
 
 class Categories extends StatelessWidget {
   const Categories({
@@ -20,7 +19,7 @@ class Categories extends StatelessWidget {
           (index) => Container(
             decoration: BoxDecoration(
               color:
-                  currentCat == catgories[index] ? kprimaryColor : Colors.white,
+                  currentCat == catgories[index] ? Theme.of(context).colorScheme.primary : Colors.white,
               borderRadius: BorderRadius.circular(25),
             ),
             padding: const EdgeInsets.symmetric(
