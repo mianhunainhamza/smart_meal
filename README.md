@@ -1,6 +1,6 @@
-# smart_meal
+# Smart Meal
 
-A new Flutter project.
+A Smart Meal App
 
 ## Getting Started
 
