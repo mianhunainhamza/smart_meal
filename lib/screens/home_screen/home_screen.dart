@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_meal/screens/home_screen/widgets/categories.dart';
+import 'package:smart_meal/screens/home_screen/widgets/explore_widget.dart';
 import 'package:smart_meal/screens/home_screen/widgets/home_appbar.dart';
 import 'package:smart_meal/screens/home_screen/widgets/home_search_bar.dart';
 import 'package:smart_meal/screens/home_screen/widgets/quick_and_fast_list.dart';
@@ -29,21 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 const HomeSearchBar(),
                 const SizedBox(height: 20),
                 Container(
-                  width: double.infinity,
-                  height: 170,
+                  height: 230,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: const DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage("assets/images/explore.png"),
-                    ),
                   ),
+                  child: const ExploreWidget(),
                 ),
-                const SizedBox(height: 20),
-                const Text(
+                Text(
                   "Categories",
                   style: TextStyle(
                     fontSize: 20,
+                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smart_meal/widgets/custom_button.dart';
 import '../../../models/food.dart';
 import '../widgets/food_counter.dart';
 
 class RecipeScreen extends StatefulWidget {
   final Food food;
+
   const RecipeScreen({super.key, required this.food});
 
   @override
@@ -15,40 +17,68 @@ class RecipeScreen extends StatefulWidget {
 class _RecipeScreenState extends State<RecipeScreen> {
   int currentNumber = 1;
 
+  // Sample ingredients list
+  final List<Map<String, String>> ingredients = [
+    {
+      'name': 'Ramen Noodles',
+      'quantity': '400g',
+      'image': 'assets/images/ramen-noodles.jpg'
+    },
+    {
+      'name': 'Soy Sauce',
+      'quantity': '100ml',
+      'image': 'assets/images/ramen-noodles.jpg'
+    },
+    {
+      'name': 'Green Onions',
+      'quantity': '50g',
+      'image': 'assets/images/ramen-noodles.jpg'
+    },
+    {
+      'name': 'Chicken',
+      'quantity': '200g',
+      'image': 'assets/images/butter-chicken.jpg'
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(10),
         child: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: CustomButton(
+                  text: 'Start Cooking',
+                  onPressed: () {},
+                  isLoading: false,
+                  tag: '',
+                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(.9),
                 ),
-                child: const Text("Start Cooking"),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: IconButton(
+                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
                 onPressed: () {},
                 style: IconButton.styleFrom(
                   shape: CircleBorder(
                     side: BorderSide(
-                      color: Colors.grey.shade300,
+                      color: Theme.of(context).colorScheme.tertiary,
                       width: 2,
                     ),
                   ),
                 ),
                 icon: Icon(
                   widget.food.isLiked ? Iconsax.heart5 : Iconsax.heart,
-                  color: widget.food.isLiked ? Colors.red : Colors.black,
-                  size: 20,
+                  color: widget.food.isLiked ? Colors.red : Theme.of(context).colorScheme.tertiary,
+                  size: 27,
                 ),
               ),
             ),
@@ -62,12 +92,15 @@ class _RecipeScreenState extends State<RecipeScreen> {
             Stack(
               children: [
                 Positioned(
-                  child: Container(
-                    height: MediaQuery.of(context).size.width - 20,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(widget.food.image),
-                        fit: BoxFit.fill,
+                  child: Hero(
+                    tag: widget.food.name,
+                    child: Container(
+                      height: MediaQuery.of(context).size.width - 20,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(widget.food.image),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
@@ -81,7 +114,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       IconButton(
                         onPressed: () => Navigator.pop(context),
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(.8),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -93,7 +129,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       IconButton(
                         onPressed: () {},
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(.8),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -111,9 +150,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(20),
                         topLeft: Radius.circular(20),
                       ),
@@ -127,7 +166,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 width: 50,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -140,40 +179,43 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 children: [
                   Text(
                     widget.food.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Iconsax.flash_1,
                         size: 20,
-                        color: Colors.grey,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       Text(
                         "${widget.food.cal} Cal",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
-                      const Text(
-                        " · ",
-                        style: TextStyle(color: Colors.grey),
+                      Text(
+                        " · ",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
                       ),
-                      const Icon(
+                      Icon(
                         Iconsax.clock,
                         size: 20,
-                        color: Colors.grey,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       Text(
                         "${widget.food.time} Min",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                     ],
@@ -183,7 +225,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     children: [
                       Icon(
                         Iconsax.star5,
-                        color: Colors.yellow.shade700,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 25,
                       ),
                       const SizedBox(width: 5),
@@ -191,7 +233,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                         "${widget.food.rate}/5",
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade600,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                       const SizedBox(width: 5),
@@ -199,32 +241,33 @@ class _RecipeScreenState extends State<RecipeScreen> {
                         "(${widget.food.reviews} Reviews)",
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade400,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Ingredients",
                             style: TextStyle(
                               fontSize: 20,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
                             "How many servings?",
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey,
+                              color: Theme.of(context).colorScheme.tertiary,
                             ),
-                          )
+                          ),
                         ],
                       ),
                       const Spacer(),
@@ -240,117 +283,65 @@ class _RecipeScreenState extends State<RecipeScreen> {
                             });
                           }
                         },
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.food.image),
-                                fit: BoxFit.fill,
+                      // Limit the displayed ingredients to 3 items
+                      for (int i = 0; i < ingredients.length; i++)
+                        Column(children: [
+                          Divider(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            height: 30,
+                            thickness: 1,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                    image: AssetImage(ingredients[i]['image']!),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 10),
+                              Text(
+                                ingredients[i]['name']!,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withOpacity(.8),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                ingredients[i]['quantity']!,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "400g",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
-                            ),
-                          )
-                        ],
-                      ),
+                        ]),
                       Divider(
-                        height: 20,
-                        color: Colors.grey.shade300,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        height: 30,
+                        thickness: 1,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.food.image),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "400g",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
-                            ),
-                          )
-                        ],
-                      ),
-                      Divider(
-                        height: 20,
-                        color: Colors.grey.shade300,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.food.image),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "400g",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
-                            ),
-                          )
-                        ],
-                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),

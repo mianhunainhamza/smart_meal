@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:smart_meal/screens/shopping/shopping_page.dart';
 import 'home_screen/home_screen.dart'; // Ensure this import is correct
 
 class BottomNavbar extends StatefulWidget {
@@ -13,7 +14,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   int currentIndex = 0;
   final List<Widget> screens = const [
     HomeScreen(),
-    Scaffold(), // Replace with actual screens
+    ShoppingPage(),
     Scaffold(),
     Scaffold(),
   ];
@@ -35,7 +36,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
             icon: Icons.home,
           ),
           GButton(
-            icon: Icons.favorite,
+            icon: Icons.shopping_cart,
           ),
           GButton(
             icon: Icons.calendar_today,

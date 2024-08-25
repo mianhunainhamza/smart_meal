@@ -10,10 +10,11 @@ class HomeAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text(
+        Text(
           "What are you\ncooking today?",
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 28,
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
             fontWeight: FontWeight.bold,
             height: 1,
           ),
@@ -25,8 +26,9 @@ class HomeAppbar extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            backgroundColor: Colors.white,
-            fixedSize: const Size(55, 55),
+            backgroundColor:
+                Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
+            fixedSize: const Size(50, 50),
           ),
           icon: const Icon(Iconsax.notification),
         ),

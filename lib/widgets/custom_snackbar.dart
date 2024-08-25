@@ -25,7 +25,7 @@ class CustomSnackbar {
                       Text(
                         title,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -33,7 +33,7 @@ class CustomSnackbar {
                       Text(
                         message,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ],
@@ -44,7 +44,7 @@ class CustomSnackbar {
           ),
         ),
         isDismissible: true,
-        duration: const Duration(milliseconds: 2000),
+        duration: const Duration(seconds: 2),
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         padding: EdgeInsets.zero,

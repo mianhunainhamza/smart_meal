@@ -18,8 +18,9 @@ class Categories extends StatelessWidget {
           catgories.length,
           (index) => Container(
             decoration: BoxDecoration(
-              color:
-                  currentCat == catgories[index] ? Theme.of(context).colorScheme.primary : Colors.white,
+              color: currentCat == catgories[index]
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onPrimary.withOpacity(.3),
               borderRadius: BorderRadius.circular(25),
             ),
             padding: const EdgeInsets.symmetric(
@@ -31,8 +32,8 @@ class Categories extends StatelessWidget {
               catgories[index],
               style: TextStyle(
                 color: currentCat == catgories[index]
-                    ? Colors.white
-                    : Colors.grey.shade600,
+                    ? Theme.of(context).colorScheme.onSecondary.withOpacity(1)
+                    : Theme.of(context).colorScheme.surface.withOpacity(1),
               ),
             ),
           ),

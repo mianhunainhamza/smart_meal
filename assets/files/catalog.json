@@ -1,0 +1,60 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Organic Quinoa",
+      "desc": "A nutrient-dense, gluten-free grain packed with protein and fiber. Ideal for salads and bowls.",
+      "prices": 1200,
+      "color": "#E0F7FA",
+      "image": "https://www.cerretobio.com/images/cerreto/prodotti/eng/quick-and-tasty/white-quinoa/white-quinoa.png"
+    },
+    {
+      "id": 2,
+      "name": "Almond Butter",
+      "desc": "Rich in healthy fats and protein, perfect for spreading or adding to smoothies.",
+      "prices": 1500,
+      "color": "#FFEBEE",
+      "image": "https://cdn.pixabay.com/photo/2024/07/01/04/15/ai-generated-8864296_640.png"
+    },
+    {
+      "id": 3,
+      "name": "Chia Seeds",
+      "desc": "Loaded with antioxidants, fiber, and omega-3 fatty acids, great for pudding or smoothies.",
+      "prices": 700,
+      "color": "#FFF3E0",
+      "image": "https://www.pngall.com/wp-content/uploads/2017/11/Chia-Seeds-PNG-HD.png"
+    },
+    {
+      "id": 4,
+      "name": "Greek Yogurt",
+      "desc": "A high-protein, probiotic-rich snack that’s perfect for breakfast or a post-workout treat.",
+      "prices": 500,
+      "color": "#ECEFF1",
+      "image": "https://wallpapers.com/images/hd/dannon-lightand-fit-greek-yogurt-vanilla-uxkvsjhnkcbn7gbo.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Mixed Nuts",
+      "desc": "A blend of almonds, walnuts, and cashews. A great source of healthy fats and protein.",
+      "prices": 1100,
+      "color": "#F1F8E9",
+      "image": "https://www.pngall.com/wp-content/uploads/5/Food-Mixed-Nuts-PNG-Free-Download.png"
+    },
+    {
+      "id": 6,
+      "name": "Boneless Skinless Chicken Breast",
+      "desc": "Lean chicken breast, perfect for grilling or baking, ensuring a healthy, oil-free meal.",
+      "prices": 1800,
+      "color": "#FFEBEE",
+      "image": "https://www.perdue.com/product-images/PK_936_CBTNR_RD_ITD0718_FV_clean_640.jpg"
+    },
+    {
+      "id": 7,
+      "name": "Avocado",
+      "desc": "A nutrient-packed fruit rich in healthy fats, perfect for toast or salads.",
+      "prices": 300,
+      "color": "#E8F5E9",
+      "image": "https://i.pinimg.com/originals/d7/ea/7a/d7ea7a3ad9110b018fbba872da72dbee.png"
+    }
+  ]
+}

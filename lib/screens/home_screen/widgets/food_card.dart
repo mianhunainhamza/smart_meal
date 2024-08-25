@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../models/food.dart';
 import '../components/recipe_screen.dart';
@@ -10,12 +11,7 @@ class FoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RecipeScreen(food: food),
-        ),
-      ),
+      onTap: () => Get.to(RecipeScreen(food: food),transition: Transition.cupertino),
       child: SizedBox(
         width: double.infinity,
         child: Stack(
@@ -23,21 +19,25 @@ class FoodCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: AssetImage(food.image),
-                      fit: BoxFit.fill,
+                Hero(
+                  tag: food.name,
+                  child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: AssetImage(food.image),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   food.name,
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),

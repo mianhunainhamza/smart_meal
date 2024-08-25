@@ -3,9 +3,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_meal/screens/on_board/onboard_screen.dart';
 import 'package:smart_meal/utils/colors.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import 'core/store.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(VxState(
+    store: MyStore(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,17 +28,18 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: CustomColors.greyColor.withOpacity(.2),
-          primary: CustomColors.yellowSecondaryLight,
-          secondary: CustomColors.yellowSecondaryLight,
-          onPrimary: Colors.white,
-          onSecondary: Colors.black,
-          tertiary: CustomColors.greyColor.withOpacity(.4),
+          primary: Colors.green,
+          secondary: Colors.green,
+          onPrimary: Colors.black,
+          surface: Colors.white.withOpacity(.9),
+          onSecondary: Colors.white,
+          tertiary: CustomColors.blackprimaryDark.withOpacity(.6),
         ),
         useMaterial3: true,
         fontFamily: GoogleFonts.poppins().fontFamily,
-        scaffoldBackgroundColor: CustomColors.blackprimaryDark,
-        appBarTheme: AppBarTheme(
-          backgroundColor: CustomColors.blackprimaryDark,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
           foregroundColor: Colors.white,
           elevation: 0,
         ),

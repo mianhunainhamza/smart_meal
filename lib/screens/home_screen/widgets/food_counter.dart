@@ -5,6 +5,7 @@ class FoodCounter extends StatelessWidget {
   final int currentNumber;
   final Function() onAdd;
   final Function() onRemove;
+
   const FoodCounter({
     super.key,
     required this.currentNumber,
@@ -19,7 +20,7 @@ class FoodCounter extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: 2.5,
-          color: Colors.grey.shade300,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
         borderRadius: BorderRadius.circular(25),
       ),
@@ -28,20 +29,27 @@ class FoodCounter extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onRemove,
-            icon: const Icon(Iconsax.minus),
+            icon: Icon(
+              Iconsax.minus,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
           const SizedBox(width: 10),
           Text(
             "$currentNumber",
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(width: 10),
           IconButton(
             onPressed: onAdd,
-            icon: const Icon(Iconsax.add),
+            icon: Icon(
+              Iconsax.add,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           ),
         ],
       ),

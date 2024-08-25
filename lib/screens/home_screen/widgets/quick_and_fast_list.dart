@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../models/food.dart';
 import '../components/quick_foods_screen.dart';
 import '../components/recipe_screen.dart';
-
 
 class QuickAndFastList extends StatelessWidget {
   const QuickAndFastList({super.key});
@@ -17,20 +16,17 @@ class QuickAndFastList extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               "Quick & Fast",
               style: TextStyle(
                 fontSize: 20,
+                color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
                 fontWeight: FontWeight.bold,
               ),
             ),
             TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const QuickFoodsScreen(),
-                ),
-              ),
+              onPressed: () => Get.to(const QuickFoodsScreen(),
+                  transition: Transition.cupertino),
               child: const Text("View all"),
             ),
           ],
@@ -42,12 +38,7 @@ class QuickAndFastList extends StatelessWidget {
             children: List.generate(
               foods.length,
               (index) => GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecipeScreen(food: foods[index]),
-                  ),
-                ),
+                onTap: () => Get.to(RecipeScreen(food: foods[index])),
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   width: 200,
@@ -56,22 +47,29 @@ class QuickAndFastList extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: double.infinity,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(foods[index].image),
-                                fit: BoxFit.fill,
+                          Hero(
+                            tag: foods[index].name,
+                            child: Container(
+                              width: double.infinity,
+                              height: 130,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                  image: AssetImage(foods[index].image),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           Text(
                             foods[index].name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withOpacity(.9),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -116,7 +114,10 @@ class QuickAndFastList extends StatelessWidget {
                         child: IconButton(
                           onPressed: () {},
                           style: IconButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.9),
                             fixedSize: const Size(30, 30),
                           ),
                           iconSize: 20,

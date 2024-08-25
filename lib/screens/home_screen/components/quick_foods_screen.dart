@@ -22,7 +22,7 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const QuickScreenAppbar(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

@@ -16,8 +16,8 @@ class QuickScreenAppbar extends StatelessWidget {
             Navigator.pop(context);
           },
           style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
-            fixedSize: const Size(55, 55),
+            backgroundColor: Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
+            fixedSize: const Size(50, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -26,9 +26,10 @@ class QuickScreenAppbar extends StatelessWidget {
           icon: const Icon(CupertinoIcons.chevron_back),
         ),
         const Spacer(),
-        const Text(
+        Text(
           "Quick & Fast",
           style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -37,8 +38,8 @@ class QuickScreenAppbar extends StatelessWidget {
         IconButton(
           onPressed: () {},
           style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
-            fixedSize: const Size(55, 55),
+            backgroundColor: Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
+            fixedSize: const Size(50, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),

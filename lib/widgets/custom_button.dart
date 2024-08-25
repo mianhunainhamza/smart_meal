@@ -8,11 +8,17 @@ class CustomButton extends StatefulWidget {
   final IconData? icon;
   final VoidCallback onPressed;
   final bool isLoading;
+  final double? height;
+  final double? width;
+  final double? textHeight;
 
   const CustomButton({
     super.key,
     required this.text,
+    this.width,
+    this.textHeight,
     required this.onPressed,
+    this.height,
     required this.isLoading,
     this.icon,
     this.backgroundColor,
@@ -76,7 +82,8 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
               borderRadius: BorderRadius.circular(10),
             ),
             alignment: Alignment.center,
-            height: 59,
+            height: widget.height ?? 59,
+            width: widget.width ?? MediaQuery.of(context).size.width,
             child: widget.isLoading
                 ? CircularProgressIndicator(
               color: finalTextColor,
@@ -89,8 +96,8 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
                   child: Text(
                     widget.text,
                     style: TextStyle(
-                      color: finalTextColor,
-                      fontSize: 22,
+                      color: Colors.white,
+                      fontSize:widget.textHeight??  22,
                       letterSpacing: 0.5,
                     ),
                   ),
