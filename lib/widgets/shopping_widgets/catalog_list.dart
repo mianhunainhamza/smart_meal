@@ -59,7 +59,7 @@ class CatalogItem extends StatelessWidget {
                   buttonPadding: EdgeInsets.zero,
                   alignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    "Rs ${catalog.prices}".text.color(Theme.of(context).colorScheme.primary).lg.bold.make(),
+                    "€ ${catalog.prices}".text.color(Theme.of(context).colorScheme.primary).lg.bold.make(),
                     AddToCart(catalog: catalog).wh(buttonWidth, buttonHeight),
                   ],
                 ).pOnly(right: 8),

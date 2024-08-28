@@ -116,8 +116,8 @@ class QuickAndFastList extends StatelessWidget {
                           style: IconButton.styleFrom(
                             backgroundColor: Theme.of(context)
                                 .colorScheme
-                                .onPrimary
-                                .withOpacity(.9),
+                                .onSecondary
+                                .withOpacity(.8),
                             fixedSize: const Size(30, 30),
                           ),
                           iconSize: 20,

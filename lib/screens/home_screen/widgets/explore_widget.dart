@@ -24,7 +24,7 @@ class ExploreWidget extends StatelessWidget {
                     color: Theme.of(context)
                         .colorScheme
                         .onPrimary
-                        .withOpacity(0.7)),
+                        .withOpacity(0.15)),
               ],
             ),
             child: Column(
@@ -43,7 +43,7 @@ class ExploreWidget extends StatelessWidget {
                       Shadow(
                         blurRadius: 10.0,
                         color: Colors.black.withOpacity(0.3),
-                        offset: const Offset(0, 4),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:smart_meal/screens/inventory/inventory_screen.dart';
+import 'package:smart_meal/screens/recipes/recipe_screen.dart';
 import 'package:smart_meal/screens/shopping/shopping_page.dart';
-import 'home_screen/home_screen.dart'; // Ensure this import is correct
+import 'home_screen/home_screen.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -15,8 +17,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
   final List<Widget> screens = const [
     HomeScreen(),
     ShoppingPage(),
-    Scaffold(),
-    Scaffold(),
+    RecipeFinderScreen(),
+    InventoryScreen(),
+    Scaffold()
   ];
 
   @override
@@ -27,7 +30,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
         rippleColor: Theme.of(context).colorScheme.primary,
         activeColor: Theme.of(context).colorScheme.primary,
         iconSize: 25,
-        padding: const EdgeInsets.only(left: 30, right: 30,bottom: 15,top: 5),
+        padding:
+            const EdgeInsets.only(left: 13, right: 13, bottom: 15, top: 10),
         duration: const Duration(milliseconds: 300),
         tabBackgroundColor: Theme.of(context).colorScheme.onSecondary,
         color: Theme.of(context).colorScheme.onPrimary,
@@ -39,7 +43,10 @@ class _BottomNavbarState extends State<BottomNavbar> {
             icon: Icons.shopping_cart,
           ),
           GButton(
-            icon: Icons.calendar_today,
+            icon: Icons.search,
+          ),
+          GButton(
+            icon: Icons.inventory,
           ),
           GButton(
             icon: Icons.settings,

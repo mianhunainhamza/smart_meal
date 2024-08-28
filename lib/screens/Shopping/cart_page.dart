@@ -12,7 +12,6 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: context.canvasColor,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(.9),
@@ -41,7 +40,7 @@ class _CardTotal extends StatelessWidget {
       child:cart.items.isEmpty ? " ".text.make(): Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          "Rs${cart.totalPrice}".text.color(context.theme.colorScheme.secondary).xl3.make(),
+          "€${cart.totalPrice}".text.color(context.theme.colorScheme.secondary).xl3.make(),
           30.widthBox,
           ElevatedButton(
               onPressed: (){

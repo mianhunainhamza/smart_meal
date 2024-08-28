@@ -46,7 +46,7 @@ class ShoppingPageState extends State<ShoppingPage> {
               child: Text("Products")),
           titleTextStyle: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.primary,
               fontSize: 25),
           centerTitle: true,
         ),

@@ -17,29 +17,39 @@ class RecipeScreen extends StatefulWidget {
 class _RecipeScreenState extends State<RecipeScreen> {
   int currentNumber = 1;
 
-  // Sample ingredients list
-  final List<Map<String, String>> ingredients = [
+  // Sample ingredients list with numeric quantities
+  final List<Map<String, dynamic>> ingredients = [
     {
       'name': 'Ramen Noodles',
-      'quantity': '400g',
+      'quantity': 400, // Quantity in grams
+      'unit': 'g',
       'image': 'assets/images/ramen-noodles.jpg'
     },
     {
       'name': 'Soy Sauce',
-      'quantity': '100ml',
+      'quantity': 100, // Quantity in milliliters
+      'unit': 'ml',
       'image': 'assets/images/ramen-noodles.jpg'
     },
     {
       'name': 'Green Onions',
-      'quantity': '50g',
+      'quantity': 50, // Quantity in grams
+      'unit': 'g',
       'image': 'assets/images/ramen-noodles.jpg'
     },
     {
       'name': 'Chicken',
-      'quantity': '200g',
+      'quantity': 200, // Quantity in grams
+      'unit': 'g',
       'image': 'assets/images/butter-chicken.jpg'
     },
   ];
+
+  // Function to calculate adjusted quantity
+  String calculateQuantity(int baseQuantity) {
+    final adjustedQuantity = baseQuantity * currentNumber;
+    return '$adjustedQuantity';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +68,16 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   isLoading: false,
                   tag: '',
                   textColor: Theme.of(context).colorScheme.onPrimary,
-                  backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(.9),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(.9),
                 ),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: IconButton(
-                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 onPressed: () {},
                 style: IconButton.styleFrom(
                   shape: CircleBorder(
@@ -77,7 +89,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ),
                 icon: Icon(
                   widget.food.isLiked ? Iconsax.heart5 : Iconsax.heart,
-                  color: widget.food.isLiked ? Colors.red : Theme.of(context).colorScheme.tertiary,
+                  color: widget.food.isLiked
+                      ? Colors.red
+                      : Theme.of(context).colorScheme.tertiary,
                   size: 27,
                 ),
               ),
@@ -290,50 +304,69 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Limit the displayed ingredients to 3 items
+                      // Display adjusted ingredient quantities
                       for (int i = 0; i < ingredients.length; i++)
-                        Column(children: [
-                          Divider(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            height: 30,
-                            thickness: 1,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                    image: AssetImage(ingredients[i]['image']!),
-                                    fit: BoxFit.fill,
+                        Column(
+                          children: [
+                            Divider(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              height: 30,
+                              thickness: 1,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage(ingredients[i]['image']!),
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                ingredients[i]['name']!,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.8),
-                                  fontWeight: FontWeight.bold,
+                                const SizedBox(width: 10),
+                                Text(
+                                  ingredients[i]['name']!,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary
+                                        .withOpacity(.8),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                ingredients[i]['quantity']!,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).colorScheme.tertiary,
+                                const Spacer(),
+                                Text(
+                                  "${calculateQuantity(ingredients[i]['quantity'])}${ingredients[i]['unit']}",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ]),
+                                IconButton(
+                                  icon: Icon(
+                                    Iconsax.close_circle,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      ingredients.removeAt(i);
+                                      if (ingredients.isEmpty) {
+                                        Navigator.pop(
+                                            context);
+                                      }
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       Divider(
                         color: Theme.of(context).colorScheme.tertiary,
                         height: 30,

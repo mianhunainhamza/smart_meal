@@ -13,7 +13,7 @@ class OnBoarding {
 List<OnBoarding> onBoardinglist = [
   OnBoarding(
     title: 'Tasty Meal Planning',
-    image: 'assets/lottie/food1.json',
+    image: 'assets/lottie/food3.json',
     description:
     'Plan and organize your meals with ease. Discover recipes, create shopping lists, and track your culinary adventures.',
   ),

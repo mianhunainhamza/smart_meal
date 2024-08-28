@@ -19,7 +19,7 @@ class DetailPage extends StatelessWidget {
           buttonPadding: EdgeInsets.zero,
           alignment: MainAxisAlignment.spaceBetween,
           children: [
-            "Rs ${catalog.prices}".text.xl3.color(context.theme.colorScheme.secondary).bold.make(),
+            "€ ${catalog.prices}".text.xl3.color(context.theme.colorScheme.secondary).bold.make(),
                 AddToCart(catalog: catalog).wh(context.safePercentHeight * 10
                 , context.safePercentHeight * 6)
           ],
@@ -81,5 +81,4 @@ class DetailPage extends StatelessWidget {
       ),
     );
   }
-  Duration get transitionDuration => const Duration(milliseconds: 10000);
 }
