@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:velocity_x/velocity_x.dart';
-import '../../core/store.dart';
-import '../../models/cart.dart';
-import '../../models/catalog.dart';
-import '../custom_snackbar.dart';
+
+import '../../../core/store.dart';
+import '../../../models/cart.dart';
+import '../../../models/catalog.dart';
+import '../../../widgets/custom_snackbar.dart';
 
 class AddToCart extends StatelessWidget {
   final Item catalog;
@@ -16,8 +17,8 @@ class AddToCart extends StatelessWidget {
   Widget build(BuildContext context)
   {
     VxState.watch(context, on: [AddMutation,RemoveMutation]);
-    final CartModel _cart= (VxState.store as MyStore).cart;
-    bool isInCart= _cart.items.contains(catalog)??false;
+    final CartModel cart= (VxState.store as MyStore).cart;
+    bool isInCart= cart.items.contains(catalog)??false;
     return ElevatedButton(
         onPressed: (){
           if(!isInCart)

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
 import '../../../models/food.dart';
+import '../../../providers/inventory_provider.dart';
 import '../widgets/food_counter.dart';
 
 class RecipeScreen extends StatefulWidget {
@@ -29,6 +31,11 @@ class _RecipeScreenState extends State<RecipeScreen> {
       'name': 'Soy Sauce',
       'quantity': 100, // Quantity in milliliters
       'unit': 'ml',
+      'image': 'assets/images/ramen-noodles.jpg'
+    },{
+      'name': 'Apple',
+      'quantity': 5, // Quantity in milliliters
+      'unit': 'x',
       'image': 'assets/images/ramen-noodles.jpg'
     },
     {
@@ -301,79 +308,102 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Display adjusted ingredient quantities
-                      for (int i = 0; i < ingredients.length; i++)
-                        Column(
-                          children: [
-                            Divider(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              height: 30,
-                              thickness: 1,
-                            ),
-                            Row(
+                  Consumer<InventoryProvider>(
+                    builder: (context, inventoryProvider, child) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Display adjusted ingredient quantities
+                          for (int i = 0; i < ingredients.length; i++)
+                            Column(
                               children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      image:
-                                          AssetImage(ingredients[i]['image']!),
-                                      fit: BoxFit.fill,
+                                Divider(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  height: 30,
+                                  thickness: 1,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                              ingredients[i]['image']!),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  ingredients[i]['name']!,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary
-                                        .withOpacity(.8),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  "${calculateQuantity(ingredients[i]['quantity'])}${ingredients[i]['unit']}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Iconsax.close_circle,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      ingredients.removeAt(i);
-                                      if (ingredients.isEmpty) {
-                                        Navigator.pop(
-                                            context);
-                                      }
-                                    });
-                                  },
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ingredients[i]['name']!,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          "${calculateQuantity(ingredients[i]['quantity'])} ${ingredients[i]['unit']!}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    if (inventoryProvider.isItemAvailable(
+                                        ingredients[i]['name']!))
+                                      const Text(
+                                        'Available',
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    else
+                                      Row(children: [
+                                        Tooltip(
+                                          message:'Item is missing in inventory',
+                                            child: Icon(Icons.error_outline,size: 25,color: Colors.red.withOpacity(.8),)),
+                                        const SizedBox(width: 5,),
+                                        CustomButton(
+                                          height: 45,
+                                          width: 110,
+                                          textHeight: 16,
+                                          text: 'Add',
+                                          onPressed: () {
+
+                                          },
+                                          isLoading: false,
+                                          tag: '',
+                                          textColor: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(.9),
+                                        ),
+                                      ]),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      Divider(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        height: 30,
-                        thickness: 1,
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

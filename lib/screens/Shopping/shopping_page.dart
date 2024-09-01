@@ -6,8 +6,8 @@ import "package:velocity_x/velocity_x.dart";
 import '../../../core/store.dart';
 import '../../models/cart.dart';
 import '../../models/catalog.dart';
-import '../../widgets/shopping_widgets/catalog_list.dart';
 import 'cart_page.dart';
+import 'components/catalog_list.dart';
 
 class ShoppingPage extends StatefulWidget {
   const ShoppingPage({super.key});

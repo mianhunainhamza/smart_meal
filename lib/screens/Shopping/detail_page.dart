@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/catalog.dart';
-import '../../widgets/shopping_widgets/add_to_cart.dart';
+import 'components/add_to_cart.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key, required this.catalog});
@@ -45,7 +45,7 @@ class DetailPage extends StatelessWidget {
           children: [
             Hero(
                 tag:Key(catalog.id.toString()),
-                child: Image.network(catalog.image))
+                child: Image.asset(catalog.image))
                 .h32(context),
             Expanded(
                   child: VxArc(

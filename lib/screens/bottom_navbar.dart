@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:smart_meal/screens/account/account_screen.dart';
 import 'package:smart_meal/screens/inventory/inventory_screen.dart';
 import 'package:smart_meal/screens/recipes/recipe_screen.dart';
 import 'package:smart_meal/screens/shopping/shopping_page.dart';
@@ -19,7 +20,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
     ShoppingPage(),
     RecipeFinderScreen(),
     InventoryScreen(),
-    Scaffold()
+    AccountScreen()
   ];
 
   @override
