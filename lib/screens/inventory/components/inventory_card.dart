@@ -6,9 +6,9 @@ class InventoryCard extends StatelessWidget {
   final InventoryItem item;
   final bool isRemoving;
   final int selectedQuantity;
-  final Function(int)? onSelectQuantity;
-  final Function()? onRemove;
-  final Function()? onSelectAll;
+  final void Function(int) onSelectQuantity;
+  final void Function() onRemove;
+  final void Function() onSelectAll;
   final double height;
   final double width;
   final double horizontalPadding;
@@ -19,9 +19,13 @@ class InventoryCard extends StatelessWidget {
     required this.item,
     required this.isRemoving,
     required this.selectedQuantity,
-    this.onSelectQuantity,
-    this.onRemove,
-    this.onSelectAll, required this.height, required this.horizontalPadding, required this.verticalPadding, required this.width,
+    required this.onSelectQuantity,
+    required this.onRemove,
+    required this.onSelectAll,
+    required this.height,
+    required this.width,
+    required this.horizontalPadding,
+    required this.verticalPadding,
   });
 
   @override
@@ -40,81 +44,84 @@ class InventoryCard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: width,
+              SizedBox(
                 height: height,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  image: DecorationImage(
-                    image: AssetImage(item.image),
-                    fit: BoxFit.fill,
-                  ),
+                width: width,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                  child: Image.asset(item.image, fit: BoxFit.contain),
                 ),
               ),
-              const SizedBox(height: 10),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding,vertical: 3),
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 10),
                 child: Text(
                   item.name,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                    fontSize: 17,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: Text(
+                  '${item.quantity} available',
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+                child: Text(
+                  'Price: \$${item.price.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding,vertical: 3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(Icons.calendar_today, color: Colors.grey[600], size: 16),
+                    const SizedBox(width: 5),
                     Text(
-                      "Date Added: ${item.dateAdded}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
+                      'Added: ${item.dateAdded}',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
-                    const SizedBox(height: 5,),
-                    Text(
-                      "Expiry Date: ${item.expiryDate}",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.redAccent.withOpacity(.7),
-                      ),
-                    ),
-                    const SizedBox(height: 5,),
-                    Text(
-                      "Quantity: ${item.quantity}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5,),
-                    Text(
-                      "Price: \$${item.price.toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5,),
-                    if (item.details != null)
-                      Text(
-                        "Details: ${item.details}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.calendar_today, color: Colors.red[600], size: 16),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Expires: ${item.expiryDate}',
+                      style: TextStyle(fontSize: 12, color: Colors.red[600]),
+                    ),
+                  ],
+                ),
+              ),
+              if (item.details != null && item.details!.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+                  child: Text(
+                    'Details: ${item.details}',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                ),
               if (isRemoving)
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -124,22 +131,19 @@ class InventoryCard extends StatelessWidget {
                             icon: const Icon(Iconsax.minus_square, color: Colors.redAccent),
                             onPressed: () {
                               if (selectedQuantity > 0) {
-                                onSelectQuantity!(selectedQuantity - 1);
+                                onSelectQuantity(selectedQuantity - 1);
                               }
                             },
                           ),
                           Text(
                             'Selected: $selectedQuantity',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                           IconButton(
                             icon: const Icon(Iconsax.add_square, color: Colors.green),
                             onPressed: () {
                               if (selectedQuantity < item.quantity) {
-                                onSelectQuantity!(selectedQuantity + 1);
+                                onSelectQuantity(selectedQuantity + 1);
                               }
                             },
                           ),

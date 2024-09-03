@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import '../models/inventory_item.dart';
 
 class InventoryProvider extends ChangeNotifier {
@@ -19,6 +20,13 @@ class InventoryProvider extends ChangeNotifier {
       expiryDate: '12-11-2024',
       quantity: 20,
       price: 1.20,
+    ),InventoryItem(
+      name: 'Egg',
+      image: 'assets/images/general.png',
+      dateAdded: '12-10-2024',
+      expiryDate: '12-11-2024',
+      quantity: 20,
+      price: 1.20,
     ),
     InventoryItem(
       name: 'Orange',
@@ -30,20 +38,56 @@ class InventoryProvider extends ChangeNotifier {
     ),
   ];
 
-  // Check if an item is available in the inventory
-  bool isItemAvailable(String itemName) {
-    return inventory.any((item) => item.name.toLowerCase() == itemName.toLowerCase());
+// Check if an item is available in the inventory and has enough quantity
+  bool isItemAvailable(String itemName, int requiredQuantity) {
+    final item = inventory.firstWhereOrNull(
+          (item) => item.name.toLowerCase() == itemName.toLowerCase(),
+    );
+
+    return item != null && item.quantity >= requiredQuantity;
   }
+
+  void removeSelectedItems(Map<String, int> selectedItems) {
+    selectedItems.forEach((itemName, quantity) {
+      final item = inventory.firstWhere(
+            (item) => item.name == itemName,
+        orElse: () => InventoryItem(
+          name: '',
+          image: '',
+          dateAdded: '',
+          expiryDate: '',
+          quantity: 0,
+          price: 0.0,
+        ),
+      );
+
+      if (item.name.isNotEmpty) {
+        if (item.quantity <= quantity) {
+          inventory.remove(item);
+        } else {
+          item.quantity -= quantity;
+        }
+      }
+    });
+    notifyListeners();
+  }
+  void addItem(InventoryItem item) {
+    inventory.add(item);
+    notifyListeners();
+  }
+
+  void updateItem(InventoryItem oldItem, InventoryItem newItem) {
+    final index = inventory.indexOf(oldItem);
+    if (index != -1) {
+      inventory[index] = newItem;
+      notifyListeners();
+    }
+  }
+
 
   // Add item to the cart (you'll need a cart mechanism)
   void addItemToCart(String itemName) {
     // Implement your cart logic here
-    notifyListeners();
-  }
-
-  // Method to add an item to the inventory
-  void addItem(InventoryItem item) {
-    inventory.add(item);
     notifyListeners();
   }
 

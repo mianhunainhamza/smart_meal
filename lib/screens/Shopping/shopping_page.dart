@@ -1,11 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
-import "package:velocity_x/velocity_x.dart";
-import '../../../core/store.dart';
-import '../../models/cart.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../models/catalog.dart';
+import '../../providers/cart_provider.dart';
 import 'cart_page.dart';
 import 'components/catalog_list.dart';
 
@@ -23,11 +24,12 @@ class ShoppingPageState extends State<ShoppingPage> {
     loadData();
   }
 
-  loadData() async {
+  Future<void> loadData() async {
     await Future.delayed(const Duration(seconds: 1));
-    var catalogJson = await rootBundle.loadString("assets/files/catalog.json");
-    var decodeData = jsonDecode(catalogJson);
-    var productsData = decodeData["products"];
+    final catalogJson =
+        await rootBundle.loadString("assets/files/catalog.json");
+    final decodeData = jsonDecode(catalogJson);
+    final productsData = decodeData["products"];
     setState(() {
       CatalogModel.items = List.from(productsData)
           .map<Item>((item) => Item.fromMap(item))
@@ -37,53 +39,95 @@ class ShoppingPageState extends State<ShoppingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = (VxState.store as MyStore).cart;
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text("Products")),
-          titleTextStyle: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 25),
-          centerTitle: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text("Products"),
         ),
-        floatingActionButton: VxBuilder(
-            mutations: const {AddMutation, RemoveMutation},
-            builder: (context, MyStore, none) {
-              return FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (c) => const CartPage()));
-                },
-                backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                child: Icon(
-                  CupertinoIcons.cart,
-                  color: Theme.of(context).colorScheme.primary,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.primary,
+          fontSize: 25,
+        ),
+        centerTitle: true,
+      ),
+      floatingActionButton: Stack(
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (c) => const CartPage()),
+              );
+            },
+            backgroundColor: Theme.of(context).colorScheme.onSecondary,
+            child: Icon(
+              CupertinoIcons.cart,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          Positioned(
+            right: 10,
+            top: 5,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
+              ),
+              constraints: const BoxConstraints(
+                maxWidth: 20,
+                maxHeight: 25,
+              ),
+              child: Center(
+                child: Text(
+                  '${cartProvider.items.length}',
+                  style: TextStyle(
+                    color: Theme.of(context).canvasColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ).badge(
-                  size: 20,
-                  count: cart.items.length,
-                  color: Theme.of(context).colorScheme.primary,
-                  textStyle: TextStyle(
-                      color: (context.canvasColor),
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold));
-            }),
-        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-        body: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (CatalogModel.items.isNotEmpty)
-                const CatalogList().expand()
-              else
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      context.theme.colorScheme.secondary),
-                ).centered().expand(),
-            ])));
+              ),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: Theme.of(context).colorScheme.onSecondary,
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (CatalogModel.items.isNotEmpty)
+              const Expanded(child: CatalogList())
+            else
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        height: 100,
+                        width: double.infinity,
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

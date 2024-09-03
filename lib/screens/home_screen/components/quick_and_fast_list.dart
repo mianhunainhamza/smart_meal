@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../models/food.dart';
-import '../components/quick_foods_screen.dart';
-import '../components/recipe_screen.dart';
+import '../../recipes/quick_foods_screen.dart';
+import '../../recipes/recipe_screen.dart';
 
 class QuickAndFastList extends StatelessWidget {
   const QuickAndFastList({super.key});
@@ -13,24 +13,20 @@ class QuickAndFastList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Quick & Fast",
-              style: TextStyle(
-                fontSize: 20,
-                color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: () => Get.to(const QuickFoodsScreen(),
-                  transition: Transition.cupertino),
-              child: const Text("View all"),
-            ),
-          ],
+        Text(
+          "Quick & Fast",
+          style: TextStyle(
+            fontSize: 20,
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //
+        //   ],
+        // ),
         const SizedBox(height: 20),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,

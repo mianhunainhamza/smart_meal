@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_meal/screens/account/account_screen.dart';
+import 'package:smart_meal/screens/recipes/quick_foods_screen.dart';
 import 'package:smart_meal/screens/inventory/inventory_screen.dart';
-import 'package:smart_meal/screens/recipes/recipe_screen.dart';
 import 'package:smart_meal/screens/shopping/shopping_page.dart';
 import 'home_screen/home_screen.dart';
 
@@ -18,7 +18,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   final List<Widget> screens = const [
     HomeScreen(),
     ShoppingPage(),
-    RecipeFinderScreen(),
+    QuickFoodsScreen(),
     InventoryScreen(),
     AccountScreen()
   ];

@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_meal/screens/recipes/quick_foods_screen.dart';
 
 class ExploreWidget extends StatelessWidget {
   const ExploreWidget({super.key});
@@ -32,7 +34,7 @@ class ExploreWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Discover\nnew\nflavors",
+                  "Discover new\nflavors",
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -48,9 +50,11 @@ class ExploreWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 55),
                 RoundButton(
-                  onTap: () {},
+                  onTap: () {
+                   Navigator.push(context, CupertinoPageRoute(builder: (c)=> const QuickFoodsScreen()));
+                  },
                   title: "Take a look",
                 )
               ],

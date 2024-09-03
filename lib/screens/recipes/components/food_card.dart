@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smart_meal/screens/recipes/recipe_screen.dart';
 import '../../../models/food.dart';
-import '../components/recipe_screen.dart';
 
 class FoodCard extends StatelessWidget {
   final Food food;
@@ -11,7 +10,14 @@ class FoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(RecipeScreen(food: food),transition: Transition.cupertino),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RecipeScreen(food: food),
+          ),
+        );
+      },
       child: SizedBox(
         width: double.infinity,
         child: Stack(
@@ -28,7 +34,7 @@ class FoodCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       image: DecorationImage(
                         image: AssetImage(food.image),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -57,7 +63,7 @@ class FoodCard extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      " · ",
+                      " · ",
                       style: TextStyle(color: Colors.grey),
                     ),
                     const Icon(
@@ -108,11 +114,11 @@ class FoodCard extends StatelessWidget {
                   fixedSize: const Size(30, 30),
                 ),
                 iconSize: 20,
-                icon: food.isLiked!
+                icon: food.isLiked
                     ? const Icon(
-                        Iconsax.heart5,
-                        color: Colors.red,
-                      )
+                  Iconsax.heart5,
+                  color: Colors.red,
+                )
                     : const Icon(Iconsax.heart),
               ),
             )

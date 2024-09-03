@@ -42,14 +42,6 @@
     },
     {
       "id": 6,
-      "name": "Boneless Skinless Chicken Breast",
-      "desc": "Lean chicken breast, perfect for grilling or baking, ensuring a healthy, oil-free meal.",
-      "prices": 39.99,
-      "color": "#FFEBEE",
-      "image": "assets/images/chicken.jpeg"
-    },
-    {
-      "id": 7,
       "name": "Avocado",
       "desc": "A nutrient-packed fruit rich in healthy fats, perfect for toast or salads.",
       "prices": 39.99,

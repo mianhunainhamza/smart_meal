@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_meal/screens/home_screen/widgets/categories.dart';
-import 'package:smart_meal/screens/home_screen/widgets/explore_widget.dart';
-import 'package:smart_meal/screens/home_screen/widgets/home_appbar.dart';
-import 'package:smart_meal/screens/home_screen/widgets/home_search_bar.dart';
-import 'package:smart_meal/screens/home_screen/widgets/quick_and_fast_list.dart';
+import 'package:smart_meal/screens/home_screen/components/categories.dart';
+import 'package:smart_meal/screens/home_screen/components/explore_widget.dart';
+import 'package:smart_meal/screens/home_screen/components/home_appbar.dart';
+import 'package:smart_meal/screens/home_screen/components/home_search_bar.dart';
+import 'package:smart_meal/screens/home_screen/components/quick_and_fast_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

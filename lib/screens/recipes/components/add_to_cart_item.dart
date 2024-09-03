@@ -1,24 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../models/catalog.dart';
+import 'package:smart_meal/models/ingredient.dart';
+import '../../../models/food.dart';
 import '../../../providers/cart_provider.dart';
 
-class AddToCart extends StatelessWidget {
-  final Item catalog;
+class AddToCartItem extends StatelessWidget {
+  final Ingredient buyItem;
 
-  const AddToCart({super.key, required this.catalog});
+  const AddToCartItem({super.key,required this.buyItem});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) {
-        final isInCart = cartProvider.items.contains(catalog);
+        final isInCart = cartProvider.recipeItems.contains(buyItem);
 
         return ElevatedButton(
           onPressed: () {
             if (!isInCart) {
-              cartProvider.addItem(catalog);
+              cartProvider.addIngredientItem(buyItem);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(milliseconds: 700),
