@@ -9,14 +9,15 @@ class HomeAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "What are you\ncooking today?",
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 26,
             color: Theme.of(context).colorScheme.onPrimary.withOpacity(.8),
             fontWeight: FontWeight.bold,
-            height: 1,
+            height: 1.4,
           ),
         ),
         const Spacer(),
@@ -27,7 +28,7 @@ class HomeAppbar extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             backgroundColor:
-                Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
+            Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
             fixedSize: const Size(50, 50),
           ),
           icon: const Icon(Iconsax.notification),

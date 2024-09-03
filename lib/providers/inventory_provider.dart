@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import '../models/inventory_item.dart';
 
 class InventoryProvider extends ChangeNotifier {
+  String selectedCategory = 'All'; // Default category
+
+  List<String> categories = ['All', 'Fruits', 'Vegetables', 'Dairy']; // Predefined categories
+
   List<InventoryItem> inventory = [
     InventoryItem(
       name: 'Apple',
@@ -11,7 +15,7 @@ class InventoryProvider extends ChangeNotifier {
       expiryDate: '20-12-2024',
       quantity: 10,
       price: 1.50,
-      details: 'Fresh and organic',
+      details: 'Fresh and organic', category: 'Fruits',
     ),
     InventoryItem(
       name: 'Banana',
@@ -19,14 +23,28 @@ class InventoryProvider extends ChangeNotifier {
       dateAdded: '12-10-2024',
       expiryDate: '12-11-2024',
       quantity: 20,
-      price: 1.20,
+      price: 1.20, category: 'Fruits',
     ),InventoryItem(
       name: 'Egg',
-      image: 'assets/images/general.png',
+      image: 'assets/images/eggs.png',
       dateAdded: '12-10-2024',
       expiryDate: '12-11-2024',
       quantity: 20,
-      price: 1.20,
+      price: 1.20, category: 'Dairy',
+    ),InventoryItem(
+      name: 'Ginger',
+      image: 'assets/images/ginger.png',
+      dateAdded: '12-10-2024',
+      expiryDate: '12-11-2024',
+      quantity: 30,
+      price: 1.20, category: 'Vegetables',
+    ),InventoryItem(
+      name: 'Garlic',
+      image: 'assets/images/garlic.png',
+      dateAdded: '12-10-2024',
+      expiryDate: '12-11-2024',
+      quantity: 20,
+      price: 1.20, category: 'Vegetables',
     ),
     InventoryItem(
       name: 'Orange',
@@ -34,7 +52,7 @@ class InventoryProvider extends ChangeNotifier {
       dateAdded: '10-11-2024',
       expiryDate: '20-11-2024',
       quantity: 15,
-      price: 2.00,
+      price: 2.00, category: 'Fruits',
     ),
   ];
 
@@ -57,7 +75,7 @@ class InventoryProvider extends ChangeNotifier {
           dateAdded: '',
           expiryDate: '',
           quantity: 0,
-          price: 0.0,
+          price: 0.0, category: '',
         ),
       );
 
@@ -81,6 +99,22 @@ class InventoryProvider extends ChangeNotifier {
     if (index != -1) {
       inventory[index] = newItem;
       notifyListeners();
+    }
+  }
+
+
+
+
+  void setCategory(String category) {
+    selectedCategory = category;
+    notifyListeners();
+  }
+
+  List<InventoryItem> get filteredInventory {
+    if (selectedCategory == 'All') {
+      return inventory;
+    } else {
+      return inventory.where((item) => item.category == selectedCategory).toList();
     }
   }
 

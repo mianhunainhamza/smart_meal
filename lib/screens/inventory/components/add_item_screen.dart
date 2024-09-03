@@ -52,7 +52,7 @@ class AddItemScreenState extends State<AddItemScreen> {
         expiryDate: expiryDate,
         quantity: quantity,
         price: price,
-        details: details,
+        details: details, category: '',
       );
 
       Provider.of<InventoryProvider>(context, listen: false).addItem(newItem);

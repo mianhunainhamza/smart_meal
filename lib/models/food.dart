@@ -80,7 +80,7 @@ final List<Food> foods = [
         name: 'Pepper',
         quantity: 2,
         unit: 'g',
-        image: 'assets/images/red-chilli-pepper.jpg',
+        image: 'assets/images/red-chili-pepper.png',
       ),
       Ingredient(
         name: 'Garlic Butter',
@@ -122,7 +122,7 @@ final List<Food> foods = [
         name: 'Spices',
         quantity: 20,
         unit: 'g',
-        image: 'assets/images/red-chilli-pepper.png',
+        image: 'assets/images/red-chili-pepper.png',
       ),
     ],
     instructions: "Cook chicken in butter, add tomato puree, and simmer with spices.",
@@ -143,7 +143,7 @@ final List<Food> foods = [
         image: 'assets/images/white-bread.png',
       ),
       Ingredient(
-        name: 'Eggs',
+        name: 'Egg',
         quantity: 2,
         unit: 'x',
         image: 'assets/images/eggs.png',
@@ -152,7 +152,7 @@ final List<Food> foods = [
         name: 'Milk',
         quantity: 100,
         unit: 'ml',
-        image: 'assets/images/milk.png',
+        image: 'assets/images/milks.png',
       ),
       Ingredient(
         name: 'Sugar',
@@ -179,10 +179,10 @@ final List<Food> foods = [
         image: 'assets/images/flour.png',
       ),
       Ingredient(
-        name: 'Pork',
+        name: 'Chicken',
         quantity: 150,
         unit: 'g',
-        image: 'assets/images/chicken.png',
+        image: 'assets/images/chicken-leg.png',
       ),
       Ingredient(
         name: 'Ginger',

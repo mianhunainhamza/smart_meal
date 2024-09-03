@@ -1,12 +1,12 @@
-
 class InventoryItem {
-  final String name;
-  final String image;
-  final String dateAdded;
-  final String expiryDate;
+  String name;
+  String image;
+  String dateAdded;
+  String expiryDate;
   int quantity;
-  final double price;
-  final String? details;
+  double price;
+  String? details;
+  String category;
 
   InventoryItem({
     required this.name,
@@ -16,5 +16,6 @@ class InventoryItem {
     required this.quantity,
     required this.price,
     this.details,
+    required this.category,
   });
 }

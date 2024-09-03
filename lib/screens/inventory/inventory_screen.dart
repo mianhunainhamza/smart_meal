@@ -57,6 +57,7 @@ class InventoryScreenState extends State<InventoryScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,13 +81,13 @@ class InventoryScreenState extends State<InventoryScreen> {
       ),
       body: Consumer<InventoryProvider>(
         builder: (context, provider, child) {
-          final inventory = provider.getInventoryItems();
+          final inventory = provider.filteredInventory;
 
           return Column(
             children: [
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   children: [
                     Expanded(
@@ -147,6 +148,44 @@ class InventoryScreenState extends State<InventoryScreen> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: provider.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = provider.categories[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                      child: ChoiceChip(
+                        label: Text(
+                          category,
+                          style: TextStyle(
+                            color: provider.selectedCategory == category ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        selected: provider.selectedCategory == category,
+                        onSelected: (selected) {
+                          provider.setCategory(category);
+                        },
+                        selectedColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: Colors.grey[100],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: provider.selectedCategory == category ? Theme.of(context).colorScheme.primary : Colors.grey.withOpacity(.2),
+                          ),
+                        ),
+                        elevation: 3,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      )
+
+                    );
+                  },
                 ),
               ),
               Expanded(
@@ -224,7 +263,8 @@ class InventoryScreenState extends State<InventoryScreen> {
               ),
               if (isRemoving && selectedItems.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
                   child: CustomButton(
                     tag: "",
                     backgroundColor: Theme.of(context)
