@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:smart_meal/widgets/custom_button.dart';
 import '../../../models/inventory_item.dart';
 import '../../../providers/inventory_provider.dart';
 
@@ -22,6 +23,7 @@ class EditItemScreenState extends State<EditItemScreen> {
   late int quantity;
   late double price;
   late String details;
+  String? category;
 
   @override
   void initState() {
@@ -32,7 +34,8 @@ class EditItemScreenState extends State<EditItemScreen> {
     expiryDate = widget.item.expiryDate;
     quantity = widget.item.quantity;
     price = widget.item.price;
-    details = widget.item.details!;
+    details = widget.item.details ?? '';
+    category = widget.item.category;
   }
 
   void _saveItem() {
@@ -46,7 +49,8 @@ class EditItemScreenState extends State<EditItemScreen> {
         expiryDate: expiryDate,
         quantity: quantity,
         price: price,
-        details: details, category: '',
+        details: details,
+        category: category ?? '', // Save selected category
       );
 
       Provider.of<InventoryProvider>(context, listen: false)
@@ -61,6 +65,8 @@ class EditItemScreenState extends State<EditItemScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Item'),
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -68,72 +74,219 @@ class EditItemScreenState extends State<EditItemScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
+              const SizedBox(height: 20),
+              _buildTextField(
                 initialValue: name,
-                decoration: const InputDecoration(labelText: 'Item Name'),
+                label: 'Item Name',
+                icon: Icons.label,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter item name';
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  name = value!;
-                },
+                onSaved: (value) => name = value!,
               ),
-              TextFormField(
+              const SizedBox(height: 30),
+              _buildTextField(
                 initialValue: image,
-                decoration: const InputDecoration(labelText: 'Image URL'),
-                onSaved: (value) {
-                  image = value ?? '';
-                },
+                label: 'Image URL',
+                icon: Icons.image,
+                onSaved: (value) => image = value ?? '',
               ),
-              TextFormField(
-                initialValue: dateAdded,
-                decoration: const InputDecoration(labelText: 'Date Added'),
-                onSaved: (value) {
-                  dateAdded = value ?? '';
-                },
+              const SizedBox(height: 30),
+              _buildDateField(
+                label: 'Date Added',
+                date: dateAdded,
+                onTap: () => _selectDate(context, true),
               ),
-              TextFormField(
-                initialValue: expiryDate,
-                decoration: const InputDecoration(labelText: 'Expiry Date'),
-                onSaved: (value) {
-                  expiryDate = value ?? '';
-                },
+              _buildDateField(
+                label: 'Expiry Date',
+                date: expiryDate,
+                onTap: () => _selectDate(context, false),
               ),
-              TextFormField(
+              const SizedBox(height: 10),
+              _buildTextField(
                 initialValue: quantity.toString(),
-                decoration: const InputDecoration(labelText: 'Quantity'),
+                label: 'Quantity',
+                icon: Icons.numbers,
                 keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  quantity = int.tryParse(value!) ?? 0;
+                validator: (value) {
+                  if (value == null || int.tryParse(value) == null) {
+                    return 'Please enter a valid quantity';
+                  }
+                  return null;
                 },
+                onSaved: (value) => quantity = int.tryParse(value!) ?? 0,
               ),
-              TextFormField(
-                initialValue: price.toString(),
-                decoration: const InputDecoration(labelText: 'Price'),
-                keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  price = double.tryParse(value!) ?? 0.0;
-                },
-              ),
-              TextFormField(
+              const SizedBox(height: 30),
+              _buildPriceField(),
+              const SizedBox(height: 30),
+              _buildCategoryDropdown(), // Add category dropdown
+              const SizedBox(height: 30),
+              _buildTextField(
                 initialValue: details,
-                decoration: const InputDecoration(labelText: 'Details'),
-                onSaved: (value) {
-                  details = value ?? '';
-                },
+                label: 'Details',
+                icon: Icons.description,
+                onSaved: (value) => details = value ?? '',
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
+              const SizedBox(height: 30),
+              CustomButton(
                 onPressed: _saveItem,
-                child: const Text('Save Changes'),
+               text:  'Save Changes',
+                isLoading: false,
+                tag: "",backgroundColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildTextField({
+    required String initialValue,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+    void Function(String?)? onSaved,
+  }) {
+    return TextFormField(
+      initialValue: initialValue,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+      validator: validator,
+      onSaved: onSaved,
+    );
+  }
+
+  Widget _buildDateField({
+    required String label,
+    required String date,
+    required void Function() onTap,
+  }) {
+    return ListTile(
+      title: Text(
+        label,
+        style: TextStyle(color: Theme.of(context).colorScheme.primary),
+      ),
+      subtitle: Text(
+        date.isEmpty ? 'Select Date' : date,
+        style: TextStyle(color: date.isEmpty ? Colors.grey : Colors.black),
+      ),
+      trailing: Icon(Icons.calendar_today,
+          color: Theme.of(context).colorScheme.primary),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildPriceField() {
+    return Stack(
+      children: [
+        TextFormField(
+          initialValue: price.toString(),
+          decoration: InputDecoration(
+            labelText: 'Price',
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15),
+              child: Text(
+                '€',
+                style: TextStyle(
+                  fontSize: 23,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || double.tryParse(value) == null) {
+              return 'Please enter a valid price';
+            }
+            return null;
+          },
+          onSaved: (value) => price = double.tryParse(value!) ?? 0.0,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryDropdown() {
+    final List<String> categories = [
+      'Fruits',
+      'Vegetables',
+      'Dairy',
+      'Meat',
+      'Bakery',
+      'Frozen Foods',
+      'Snacks',
+      'Beverages',
+      'Others',
+    ];
+
+    return DropdownButtonFormField<String>(
+      value: category,
+      items: categories.map((String category) {
+        return DropdownMenuItem<String>(
+          value: category,
+          child: Text(category),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          category = value;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Category',
+        prefixIcon: Icon(Icons.category, color: Theme.of(context).colorScheme.primary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+    );
+  }
+
+  void _selectDate(BuildContext context, bool isDateAdded) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isDateAdded) {
+          dateAdded = DateFormat('dd-MM-yyyy').format(picked);
+        } else {
+          expiryDate = DateFormat('dd-MM-yyyy').format(picked);
+        }
+      });
+    }
   }
 }

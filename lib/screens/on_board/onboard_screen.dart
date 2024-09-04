@@ -39,7 +39,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            flex: 5,
+            flex: 3,
             child: PageView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: onBoardinglist.length,
@@ -57,7 +57,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               },
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 100),
           Center(
             child: DotsIndicator(
               dotsCount: onBoardinglist.length,

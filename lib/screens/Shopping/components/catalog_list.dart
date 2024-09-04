@@ -52,6 +52,7 @@ class CatalogItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Card(
+        color: Theme.of(context).canvasColor,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -92,7 +93,7 @@ class CatalogItem extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        AddToCart(catalog: catalog)
+                        AddToCart(catalogItem: catalog)
                       ],
                     ).paddingOnly(right: 8),
                   ],

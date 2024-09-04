@@ -18,7 +18,6 @@ class OnBoardingCard extends StatefulWidget {
 class _OnBoardingCardState extends State<OnBoardingCard> {
   @override
   Widget build(BuildContext context) {
-    print(widget.onBoardingModel.image);
     return Lottie.asset(
       widget.onBoardingModel.image,
       width: 100,

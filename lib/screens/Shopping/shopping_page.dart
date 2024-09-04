@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../models/catalog.dart';
 import '../../providers/cart_provider.dart';
+import '../../widgets/custom_floating_button.dart';
 import 'cart_page.dart';
 import 'components/catalog_list.dart';
 
@@ -54,48 +55,9 @@ class ShoppingPageState extends State<ShoppingPage> {
         ),
         centerTitle: true,
       ),
-      floatingActionButton: Stack(
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(builder: (c) => const CartPage()),
-              );
-            },
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            child: Icon(
-              CupertinoIcons.cart,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          Positioned(
-            right: 10,
-            top: 5,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                shape: BoxShape.circle,
-              ),
-              constraints: const BoxConstraints(
-                maxWidth: 20,
-                maxHeight: 25,
-              ),
-              child: Center(
-                child: Text(
-                  '${cartProvider.items.length}',
-                  style: TextStyle(
-                    color: Theme.of(context).canvasColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      floatingActionButton: cartProvider.ingredients.isNotEmpty || cartProvider.items.isNotEmpty
+          ? CustomFloatingAction(cartProvider: cartProvider)
+          : Container(),
       backgroundColor: Theme.of(context).colorScheme.onSecondary,
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,3 +93,4 @@ class ShoppingPageState extends State<ShoppingPage> {
     );
   }
 }
+

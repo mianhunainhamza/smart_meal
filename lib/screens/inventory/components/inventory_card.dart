@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smart_meal/screens/inventory/components/edit_item_screen.dart';
 import '../../../models/inventory_item.dart';
 
 class InventoryCard extends StatelessWidget {
@@ -32,7 +34,7 @@ class InventoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle item tap
+        Navigator.push(context,CupertinoPageRoute(builder: (c) => EditItemScreen(item: item)));
       },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: verticalPadding),

@@ -17,12 +17,26 @@ class AddItemScreenState extends State<AddItemScreen> {
   final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
   String name = '';
   String image = '';
+  String? category;
   String dateAdded = '';
   String expiryDate = '';
   int quantity = 0;
   double price = 0.0;
   String details = '';
-  String currencySign = '\$';
+  String currencySign = '€';
+
+  // List of categories for the dropdown
+  final List<String> _categories = [
+    'Fruits',
+    'Vegetables',
+    'Dairy',
+    'Meat',
+    'Bakery',
+    'Frozen Foods',
+    'Snacks',
+    'Beverages',
+    'Others',
+  ];
 
   void _selectDate(BuildContext context, bool isDateAdded) async {
     final DateTime? picked = await showDatePicker(
@@ -52,7 +66,8 @@ class AddItemScreenState extends State<AddItemScreen> {
         expiryDate: expiryDate,
         quantity: quantity,
         price: price,
-        details: details, category: '',
+        details: details,
+        category: category!, // Save selected category
       );
 
       Provider.of<InventoryProvider>(context, listen: false).addItem(newItem);
@@ -74,7 +89,7 @@ class AddItemScreenState extends State<AddItemScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              const SizedBox(height: 20,),
+              const SizedBox(height: 20),
               _buildTextField(
                 label: 'Item Name',
                 icon: Icons.label,
@@ -118,6 +133,8 @@ class AddItemScreenState extends State<AddItemScreen> {
               ),
               const SizedBox(height: 30),
               _buildPriceField(),
+              const SizedBox(height: 30),
+              _buildCategoryDropdown(), // Add category dropdown
               const SizedBox(height: 30),
               _buildTextField(
                 label: 'Details',
@@ -192,32 +209,20 @@ class AddItemScreenState extends State<AddItemScreen> {
           decoration: InputDecoration(
             labelText: 'Price',
             prefixIcon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: currencySign,
-                  items: const [
-                    DropdownMenuItem(value: '\$', child: Text('\$')),
-                    DropdownMenuItem(value: '€', child: Text('€')),
-                    DropdownMenuItem(value: '£', child: Text('£')),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      currencySign = value!;
-                    });
-                  },
-                ),
-              ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 15),
+                child: Text(currencySign,style: TextStyle(
+                    fontSize: 23,
+                    color: Theme.of(context).colorScheme.primary),)
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide:
-                  BorderSide(color: Theme.of(context).colorScheme.primary),
+              BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide:
-                  BorderSide(color: Theme.of(context).colorScheme.primary),
+              BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
           ),
           keyboardType: TextInputType.number,
@@ -230,6 +235,35 @@ class AddItemScreenState extends State<AddItemScreen> {
           onSaved: (value) => price = double.tryParse(value!) ?? 0.0,
         ),
       ],
+    );
+  }
+
+  Widget _buildCategoryDropdown() {
+    return DropdownButtonFormField<String>(
+      value: category,
+      items: _categories.map((String category) {
+        return DropdownMenuItem<String>(
+          value: category,
+          child: Text(category),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          category = value ?? '';
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Category',
+        prefixIcon: Icon(Icons.category, color: Theme.of(context).colorScheme.primary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
     );
   }
 }

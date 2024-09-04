@@ -5,24 +5,23 @@ import '../models/food.dart';
 
 class CartProvider with ChangeNotifier {
   final List<Item> _items = [];
-  late double price = 0;
+  late double price = 2;
   final List<Ingredient> _ingredientItems = [];
 
   List<Item> get items => _items;
-  List<Ingredient> get recipeItems => _ingredientItems;
+  List<Ingredient> get ingredients => _ingredientItems;
 
   num get totalPrice => _items.fold(0, (sum, item) => sum + item.prices);
   num get totalIngredientPrice => price;
 
-
-  void addPrice()
-  {
-    price = price+2;
+  void addPrice() {
+    price += 2;
+    notifyListeners();
   }
 
-  void removePrice()
-  {
-    price = price-2;
+  void removePrice() {
+    price -= 2;
+    notifyListeners();
   }
 
   void addItem(Item item) {
@@ -30,10 +29,11 @@ class CartProvider with ChangeNotifier {
     print('Item added: ${item.name}');
     notifyListeners();
   }
+
   void addIngredientItem(Ingredient ingredient) {
     _ingredientItems.add(ingredient);
     addPrice();
-    print('Item added: ${ingredient.name}');
+    print('Ingredient added: ${ingredient.name}');
     notifyListeners();
   }
 
@@ -46,8 +46,39 @@ class CartProvider with ChangeNotifier {
   void removeIngredientItem(Ingredient ingredient) {
     _ingredientItems.remove(ingredient);
     removePrice();
-    print('Item removed: ${ingredient.name}');
+    print('Ingredient removed: ${ingredient.name}');
     notifyListeners();
   }
 
+  // Update the quantity of an item
+  void updateItemQuantity(Item item, int newQuantity) {
+    final index = _items.indexOf(item);
+    if (index != -1) {
+      final oldQuantity = _items[index].quantity;
+      _items[index].quantity = newQuantity;
+      // Adjust price based on new quantity
+      final priceChange = (newQuantity - oldQuantity) * item.prices;
+      if (priceChange > 0) {
+        addPrice();
+      } else {
+        removePrice();
+      }
+      notifyListeners();
+    }
+  }
+
+  // Update the quantity of an ingredient
+  void updateIngredientQuantity(Ingredient ingredient, int newQuantity) {
+    final index = _ingredientItems.indexOf(ingredient);
+    if (index != -1) {
+      final oldQuantity = _ingredientItems[index].quantity;
+      _ingredientItems[index].quantity = newQuantity;
+      if (newQuantity > 0) {
+        addPrice();
+      } else {
+        removePrice();
+      }
+      notifyListeners();
+    }
+  }
 }

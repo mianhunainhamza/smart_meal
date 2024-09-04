@@ -2,23 +2,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../models/catalog.dart';
+import '../../../models/ingredient.dart';
 import '../../../providers/cart_provider.dart';
 
 class AddToCart extends StatelessWidget {
-  final Item catalog;
+  final Item? catalogItem;
+  final Ingredient? ingredient;
 
-  const AddToCart({super.key, required this.catalog});
+  const AddToCart({super.key, this.catalogItem, this.ingredient});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) {
-        final isInCart = cartProvider.items.contains(catalog);
+        final isInCart = catalogItem != null
+            ? cartProvider.items.contains(catalogItem)
+            : ingredient != null
+            ? cartProvider.ingredients.contains(ingredient)
+            : false;
 
         return ElevatedButton(
           onPressed: () {
             if (!isInCart) {
-              cartProvider.addItem(catalog);
+              if (catalogItem != null) {
+                cartProvider.addItem(catalogItem!);
+              } else if (ingredient != null) {
+                cartProvider.addIngredientItem(ingredient!);
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(milliseconds: 700),
@@ -27,10 +37,16 @@ class AddToCart extends StatelessWidget {
                 ),
               );
             } else {
+              if (catalogItem != null) {
+                cartProvider.removeItem(catalogItem!);
+              } else if (ingredient != null) {
+                cartProvider.removeIngredientItem(ingredient!);
+                cartProvider.removePrice();
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(milliseconds: 700),
-                  content: const Text('Item already added'),
+                  content: const Text('Item has been removed'),
                   backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
               );
@@ -41,8 +57,8 @@ class AddToCart extends StatelessWidget {
             shape: WidgetStateProperty.all(const StadiumBorder()),
           ),
           child: isInCart
-              ? Icon(Icons.done, color: Theme.of(context).colorScheme.primary,size: 24,)
-              : const Icon(CupertinoIcons.cart_badge_plus, color: Colors.black,size: 24,),
+              ? Icon(Icons.done, color: Theme.of(context).colorScheme.primary, size: 24,)
+              : const Icon(CupertinoIcons.cart_badge_plus, color: Colors.black, size: 24,),
         );
       },
     );

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:smart_meal/screens/recipes/components/add_to_cart_item.dart';
-import 'package:smart_meal/screens/recipes/components/cart_item_page.dart';
+import 'package:smart_meal/screens/shopping/cart_page.dart';
+import 'package:smart_meal/screens/shopping/components/add_to_cart.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
+import 'package:smart_meal/widgets/custom_floating_button.dart';
 import '../../models/food.dart';
 import '../../models/ingredient.dart';
 import '../../providers/cart_provider.dart';
@@ -29,26 +30,40 @@ class _RecipeScreenState extends State<RecipeScreen> {
     return '$adjustedQuantity';
   }
 
+  void addAllIngredientsToCart() {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final ingredients = widget.food.ingredients;
+
+    bool allInCart = ingredients
+        .every((ingredient) => cartProvider.ingredients.contains(ingredient));
+
+    if (allInCart) {
+      for (var ingredient in ingredients) {
+        cartProvider.removeIngredientItem(ingredient);
+      }
+    } else {
+      for (var ingredient in ingredients) {
+        if (!cartProvider.ingredients.contains(ingredient)) {
+          cartProvider.addIngredientItem(ingredient);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final inventoryProvider = Provider.of<InventoryProvider>(context);
+    final ingredients = widget.food.ingredients;
+    bool allInCart = ingredients
+        .every((ingredient) => cartProvider.ingredients.contains(ingredient));
 
     return Scaffold(
       floatingActionButton: Stack(
         children: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(builder: (c) => const CartItemPage()),
-              );
-            },
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            child: Icon(
-              CupertinoIcons.cart,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
+          cartProvider.ingredients.isNotEmpty || cartProvider.items.isNotEmpty
+              ? CustomFloatingAction(cartProvider: cartProvider)
+              : Container(),
           Positioned(
             right: 10,
             top: 5,
@@ -64,7 +79,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
               ),
               child: Center(
                 child: Text(
-                  '${cartProvider.recipeItems.length}',
+                  '${cartProvider.items.length + cartProvider.ingredients.length}',
                   style: TextStyle(
                     color: Theme.of(context).canvasColor,
                     fontSize: 10,
@@ -91,7 +106,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   tag: '',
                   textColor: Theme.of(context).colorScheme.onPrimary,
                   backgroundColor:
-                  Theme.of(context).colorScheme.primary.withOpacity(.9),
+                      Theme.of(context).colorScheme.primary.withOpacity(.9),
                 ),
               ),
             ),
@@ -99,8 +114,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
             Expanded(
               child: IconButton(
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                onPressed: () {},
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                onPressed: () {
+                  inventoryProvider.toggleLikeStatus(widget.food);
+                },
                 style: IconButton.styleFrom(
                   shape: CircleBorder(
                     side: BorderSide(
@@ -325,10 +342,56 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              addAllIngredientsToCart();
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  allInCart ? 'Remove' : 'Add All',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Icon(
+                                  allInCart
+                                      ? Iconsax.close_square
+                                      : Icons.check,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Consumer<InventoryProvider>(
                     builder: (context, inventoryProvider, child) {
-                      final List<Ingredient> ingredients = widget.food.ingredients;
+                      final List<Ingredient> ingredients =
+                          widget.food.ingredients;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -355,13 +418,16 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                     ),
                                     const SizedBox(width: 10),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           ingredient.name,
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: Theme.of(context).colorScheme.onPrimary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
                                           ),
                                         ),
                                         const SizedBox(height: 5),
@@ -369,7 +435,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                           "${calculateQuantity(ingredient.quantity)} ${ingredient.unit}",
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: Theme.of(context).colorScheme.tertiary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
                                           ),
                                         ),
                                       ],
@@ -389,7 +457,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                       Row(
                                         children: [
                                           Tooltip(
-                                            message: 'Item or quantity is missing in inventory',
+                                            message:
+                                                'Item or quantity is missing in inventory',
                                             child: Icon(
                                               Icons.error_outline,
                                               size: 25,
@@ -397,14 +466,16 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                             ),
                                           ),
                                           const SizedBox(width: 5),
-                                          AddToCartItem(buyItem: ingredient)
+                                          AddToCart(ingredient: ingredient)
                                         ],
                                       ),
                                   ],
                                 ),
                               ],
                             ),
-                          SizedBox(height: Get.height * .1,)
+                          SizedBox(
+                            height: Get.height * .1,
+                          )
                         ],
                       );
                     },

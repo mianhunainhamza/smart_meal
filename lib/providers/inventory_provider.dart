@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import '../models/food.dart';
 import '../models/inventory_item.dart';
 
 class InventoryProvider extends ChangeNotifier {
@@ -136,6 +137,22 @@ class InventoryProvider extends ChangeNotifier {
     inventory.removeWhere((item) => item.name == itemName);
     notifyListeners();
   }
+
+  void toggleLikeStatus(Food foodItem) {
+    final index = foods.indexWhere((food) => food.name == foodItem.name);
+
+    // Check if the food item exists
+    if (index != -1) {
+      // Toggle the 'isLiked' status
+      print('liked');
+      foods[index].isLiked = !foods[index].isLiked;
+    } else {
+      print('Food item not found.');
+    }
+    notifyListeners();
+  }
+
+
 
   // Method to update the quantity of an item
   void updateItemQuantity(String itemName, int newQuantity) {

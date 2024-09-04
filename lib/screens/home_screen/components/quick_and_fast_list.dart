@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smart_meal/screens/recipes/components/food_card.dart';
 import '../../../models/food.dart';
-import '../../recipes/quick_foods_screen.dart';
-import '../../recipes/recipe_screen.dart';
 
 class QuickAndFastList extends StatelessWidget {
   const QuickAndFastList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth * 0.45;
+    const cardHeight = 200.0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,108 +24,19 @@ class QuickAndFastList extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //
-        //   ],
-        // ),
         const SizedBox(height: 20),
+        // Horizontal scrolling with responsive card size
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: List.generate(
               foods.length,
-              (index) => GestureDetector(
-                onTap: () => Get.to(RecipeScreen(food: foods[index])),
-                child: Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  width: 200,
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Hero(
-                            tag: foods[index].name,
-                            child: Container(
-                              width: double.infinity,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  image: AssetImage(foods[index].image),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            foods[index].name,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary
-                                  .withOpacity(.9),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Icon(
-                                Iconsax.flash_1,
-                                size: 18,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                "${foods[index].cal} Cal",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const Text(
-                                " · ",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              const Icon(
-                                Iconsax.clock,
-                                size: 18,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                "${foods[index].time} Min",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      Positioned(
-                        top: 1,
-                        right: 1,
-                        child: IconButton(
-                          onPressed: () {},
-                          style: IconButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .onSecondary
-                                .withOpacity(.8),
-                            fixedSize: const Size(30, 30),
-                          ),
-                          iconSize: 20,
-                          icon: const Icon(Iconsax.heart),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                  (index) => SizedBox(
+                width: cardWidth,
+                height: cardHeight,
+                child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: FoodCard(food: foods[index])),
               ),
             ),
           ),

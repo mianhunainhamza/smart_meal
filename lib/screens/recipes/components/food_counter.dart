@@ -36,19 +36,23 @@ class FoodCounter extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
-          const SizedBox(width: 10),
           GestureDetector(
             onTap: () => _showInputDialog(context),
-            child: Text(
-              "$currentNumber",
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+            child: SizedBox(
+              width: 30,
+              child: Center(
+                child: Text(
+                  "$currentNumber",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 10),
           IconButton(
             onPressed: onAdd,
             icon: Icon(

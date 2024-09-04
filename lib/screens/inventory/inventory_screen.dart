@@ -4,7 +4,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
 import '../../models/inventory_item.dart';
+import '../../providers/cart_provider.dart';
 import '../../providers/inventory_provider.dart';
+import '../../widgets/custom_floating_button.dart';
 import 'components/add_item_screen.dart';
 import 'components/inventory_card.dart';
 
@@ -60,7 +62,12 @@ class InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
     return Scaffold(
+     floatingActionButton:cartProvider.ingredients.isNotEmpty || cartProvider.items.isNotEmpty
+        ? CustomFloatingAction(cartProvider: cartProvider)
+        : Container(),
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,

@@ -23,12 +23,12 @@ class DetailPage extends StatelessWidget {
             Text(
               "€ ${catalog.prices}",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            AddToCart(catalog: catalog)
+            AddToCart(catalogItem: catalog)
           ],
         ).paddingSymmetric(horizontal: 30, vertical: 10),
       ),
@@ -78,7 +78,7 @@ class DetailPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         catalog.name,
                         style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -86,7 +86,7 @@ class DetailPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         catalog.desc,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ).paddingAll(20),
                       const SizedBox(height: 10),

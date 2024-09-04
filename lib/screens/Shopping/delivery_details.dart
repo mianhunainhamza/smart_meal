@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_meal/widgets/custom_button.dart';
 import '../../../utils/colors.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -262,16 +263,7 @@ class DetailsPageState extends State<DetailsPage>
                         ),
                       ),
                       const SizedBox(height: 24.0),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
+                      CustomButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -279,11 +271,10 @@ class DetailsPageState extends State<DetailsPage>
                             );
                           }
                         },
-                        child: Text('Confirm Order',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary)),
+                        text: 'Confirm Order',
+                        isLoading: false,
+                        tag: '',
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                       ),
                     ],
                   ),

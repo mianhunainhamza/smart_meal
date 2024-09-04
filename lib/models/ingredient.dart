@@ -1,8 +1,8 @@
 class Ingredient {
-  final String name;
-  final int quantity;
-  final String unit;
-  final String image;
+   String name;
+   int quantity;
+   String unit;
+   String image;
 
   Ingredient({
     required this.name,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
 import '../../models/food.dart';
+import '../../providers/cart_provider.dart';
+import '../../widgets/custom_floating_button.dart';
 import 'components/food_card.dart';
 import 'components/quick_screen_appbar.dart';
 
@@ -24,7 +27,12 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
     return Scaffold(
+      floatingActionButton:cartProvider.ingredients.isNotEmpty || cartProvider.items.isNotEmpty
+          ? CustomFloatingAction(cartProvider: cartProvider)
+          : Container(),
       appBar: AppBar(
         title: Text(
           'Quick Foods Finder',
@@ -33,6 +41,7 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.onSecondary,
         iconTheme: IconThemeData(
@@ -109,8 +118,9 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
                   : GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
+                  childAspectRatio: 2.76/3,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 30,
                 ),
                 itemCount: _filteredFoods.length,
                 itemBuilder: (ctx, index) {

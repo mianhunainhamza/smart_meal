@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
+import 'package:intl/intl.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,14 +18,28 @@ class _SignupPageState extends State<SignupScreen>
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  TextEditingController confirmPassController =
-      TextEditingController();
-  TextEditingController ageController = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
+  TextEditingController dateOfBirthController = TextEditingController();
   bool obscureText = true;
+  bool isAgree = false;
   bool isMale = true;
 
   void createAndStoreUser() async {
     print('Created user');
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        dateOfBirthController.text = DateFormat('dd-MM-yyyy').format(picked);
+      });
+    }
   }
 
   @override
@@ -41,34 +56,35 @@ class _SignupPageState extends State<SignupScreen>
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 30),
+                        horizontal: 28, vertical: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 80),
                         Row(
-                          children:[ Text(
-                            "Sign",
-                            style: TextStyle(
-                              fontSize: 40,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
+                          children: [
+                            Text(
+                              "Sign",
+                              style: TextStyle(
+                                fontSize: 40,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
                             ),
-                          ),Text(
-                            " Up",
-                            style: TextStyle(
-                              fontSize: 40,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
+                            Text(
+                              " Up",
+                              style: TextStyle(
+                                fontSize: 40,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
                             ),
-                          ),]
+                          ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 10),
                         Text(
                           'Please enter correct info',
                           style: TextStyle(
@@ -76,7 +92,6 @@ class _SignupPageState extends State<SignupScreen>
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
-
                         SizedBox(height: mediaQuery.size.height * 0.03),
                         CustomTextField(
                           controller: nameController,
@@ -105,7 +120,6 @@ class _SignupPageState extends State<SignupScreen>
                           },
                           prefixIcon: const Icon(Icons.email_outlined),
                         ),
-                        SizedBox(height: mediaQuery.size.width * 0.01),
                         // Gender Selection
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -119,8 +133,8 @@ class _SignupPageState extends State<SignupScreen>
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 70,
-                                    width: 70,
+                                    height: 50,
+                                    width: 50,
                                     decoration: BoxDecoration(
                                       color: isMale ? Colors.blue : Colors.grey,
                                       borderRadius: BorderRadius.circular(999),
@@ -134,7 +148,8 @@ class _SignupPageState extends State<SignupScreen>
                                   Text(
                                     "Male",
                                     style: TextStyle(
-                                      color: isMale ? Colors.blue : Colors.grey,
+                                      color:
+                                      isMale ? Colors.blue : Colors.grey,
                                     ),
                                   ),
                                 ],
@@ -150,8 +165,8 @@ class _SignupPageState extends State<SignupScreen>
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 70,
-                                    width: 70,
+                                    height: 50,
+                                    width: 50,
                                     decoration: BoxDecoration(
                                       color: isMale ? Colors.grey : Colors.pink,
                                       borderRadius: BorderRadius.circular(999),
@@ -165,7 +180,8 @@ class _SignupPageState extends State<SignupScreen>
                                   Text(
                                     "Female",
                                     style: TextStyle(
-                                      color: isMale ? Colors.grey : Colors.pink,
+                                      color:
+                                      isMale ? Colors.grey : Colors.pink,
                                     ),
                                   ),
                                 ],
@@ -175,24 +191,31 @@ class _SignupPageState extends State<SignupScreen>
                         ),
                         SizedBox(height: mediaQuery.size.width * 0.04),
 
-                        // Age Input
-                        CustomTextField(
-                          controller: ageController,
-                          labelText: 'Age',
-                          obscureText: false,
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Please enter a valid age';
-                            }
-                            return null;
+                        // Date of Birth Input
+                        GestureDetector(
+                          onTap: () {
+                            _selectDate(context);
                           },
-                          prefixIcon: const Icon(Icons.cake),
+                          child: AbsorbPointer(
+                            child: CustomTextField(
+                              controller: dateOfBirthController,
+                              labelText: 'Date of Birth',
+                              obscureText: false,
+                              keyboardType: TextInputType.datetime,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please enter your date of birth';
+                                }
+                                return null;
+                              },
+                              prefixIcon: const Icon(Icons.cake),
+                            ),
+                          ),
                         ),
                         SizedBox(height: mediaQuery.size.width * 0.01),
 
                         // Password Input
-                        CustomTextField(
+                        CustomTextField (
                           controller: passController,
                           labelText: 'Password',
                           obscureText: obscureText,
@@ -252,7 +275,31 @@ class _SignupPageState extends State<SignupScreen>
                             },
                           ),
                         ),
-                        SizedBox(height: mediaQuery.size.width * 0.01),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isAgree = !isAgree;
+                                });
+                              },
+                              child: isAgree
+                                  ? const Icon(CupertinoIcons.check_mark)
+                                  : const Icon(CupertinoIcons.square,
+                                  color: CupertinoColors.inactiveGray),
+                            ),
+                            const Text(" I've read and agree to "),
+                            const Text(
+                              "Terms & Conditions",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: mediaQuery.size.width * 0.05),
 
                         CustomButton(
                           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -260,19 +307,29 @@ class _SignupPageState extends State<SignupScreen>
                           icon: Icons.arrow_forward,
                           isLoading: false,
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                            if (!_formKey.currentState!.validate()) {
                               CustomSnackbar.showSnackBar(
-                                  'Error',
-                                  'Please fill all the fields',
-                                  const Icon(Icons.warning_amber),
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  context);
+                                'Error',
+                                'Please fill all the fields',
+                                const Icon(Icons.warning_amber),
+                                Theme.of(context).colorScheme.onSecondary,
+                                context,
+                              );
+                            } else if (!isAgree) {
+                              CustomSnackbar.showSnackBar(
+                                'Error',
+                                'Please agree to terms and conditions',
+                                const Icon(Icons.warning_amber),
+                                Theme.of(context).colorScheme.onSecondary,
+                                context,
+                              );
+                            } else {
                               createAndStoreUser();
-                              // Get.offAll(const BottomNavbar());
                             }
                           },
                           tag: 'onboard',
                         ),
+
                       ],
                     ),
                   ),
@@ -286,8 +343,10 @@ class _SignupPageState extends State<SignupScreen>
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color:
-                      Theme.of(context).colorScheme.onPrimary.withOpacity(.1)),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onPrimary
+                      .withOpacity(.1)),
               child: IconButton(
                 icon: Icon(
                   Icons.arrow_back,

@@ -1,15 +1,15 @@
 import 'ingredient.dart';
 
 class Food {
-  final String name;
-  final String image;
-  final List<Ingredient> ingredients;
-  final String instructions;
-  final int cal;
-  final int time;
-  final double rate;
-  final int reviews;
-  final bool isLiked;
+  String name;
+  String image;
+  List<Ingredient> ingredients;
+  String instructions;
+  int cal;
+  int time;
+  double rate;
+  int reviews;
+  bool isLiked;
 
   Food({
     required this.name,
