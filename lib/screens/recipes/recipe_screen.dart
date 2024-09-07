@@ -15,8 +15,9 @@ import 'components/food_counter.dart';
 
 class RecipeScreen extends StatefulWidget {
   final Food food;
+  final int index;
 
-  const RecipeScreen({super.key, required this.food});
+  const RecipeScreen({super.key, required this.food, required this.index});
 
   @override
   State<RecipeScreen> createState() => _RecipeScreenState();
@@ -325,6 +326,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       ),
                       const Spacer(),
                       FoodCounter(
+                        index: widget.index,
                         currentNumber: currentNumber,
                         onAdd: () => setState(() {
                           currentNumber++;
@@ -366,7 +368,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                   height: 8,
                                 ),
                                 Text(
-                                  allInCart ? 'Remove' : 'Add All',
+                                  allInCart ? 'Remove' : 'Add Missing',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color:

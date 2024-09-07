@@ -126,7 +126,7 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
                 itemBuilder: (ctx, index) {
                   final food = _filteredFoods[index];
                   return FoodCard(
-                    food: food,
+                    food: food, index: index,
                   );
                 },
               ),

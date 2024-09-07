@@ -4,7 +4,7 @@ class CatalogModel {
   static List<Item> items = [];
 
   Item getById(int id) =>
-      items.firstWhere((element) => element.id == id, orElse: null);
+      items.firstWhere((element) => element.id == id, orElse:null);
 
   Item getByPosition(int pos) => items[pos];
 }
@@ -13,29 +13,32 @@ class Item {
   int id;
   String name;
   String desc;
-  num prices;
+  double prices;
   int quantity;
   String color;
   String image;
+  String unit; // Added unit property
 
   Item(
-    this.quantity,
-    this.id,
-    this.name,
-    this.desc,
-    this.prices,
-    this.color,
-    this.image,
-  );
+      this.quantity,
+      this.id,
+      this.name,
+      this.desc,
+      this.prices,
+      this.color,
+      this.image,
+      this.unit, // Added unit parameter
+      );
 
   Item copyWith({
     int? id,
     int? quantity,
     String? name,
     String? desc,
-    num? prices,
+    double? prices,
     String? color,
     String? image,
+    String? unit, // Added unit parameter
   }) {
     return Item(
       quantity ?? this.quantity,
@@ -45,6 +48,7 @@ class Item {
       prices ?? this.prices,
       color ?? this.color,
       image ?? this.image,
+      unit ?? this.unit, // Added unit parameter
     );
   }
 
@@ -57,6 +61,7 @@ class Item {
       'prices': prices,
       'color': color,
       'image': image,
+      'unit': unit, // Added unit to map
     };
   }
 
@@ -66,9 +71,10 @@ class Item {
       map['id'] as int,
       map['name'] as String,
       map['desc'] as String,
-      map['prices'] as num,
+      map['prices'] as double,
       map['color'] as String,
       map['image'] as String,
+      map['unit'] as String, // Added unit from map
     );
   }
 
@@ -79,7 +85,7 @@ class Item {
 
   @override
   String toString() {
-    return 'Item(id: $id, name: $name, desc: $desc, prices: $prices, color: $color, image: $image)';
+    return 'Item(id: $id, name: $name, desc: $desc, prices: $prices, color: $color, image: $image, unit: $unit)';
   }
 
   @override
@@ -91,16 +97,18 @@ class Item {
         other.desc == desc &&
         other.prices == prices &&
         other.color == color &&
-        other.image == image;
+        other.image == image &&
+        other.unit == unit;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        name.hashCode ^
-        desc.hashCode ^
-        prices.hashCode ^
-        color.hashCode ^
-        image.hashCode;
+    name.hashCode ^
+    desc.hashCode ^
+    prices.hashCode ^
+    color.hashCode ^
+    image.hashCode ^
+    unit.hashCode; // Include unit in hashCode
   }
 }

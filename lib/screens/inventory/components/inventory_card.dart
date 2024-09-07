@@ -77,7 +77,7 @@ class InventoryCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
                 child: Text(
-                  'Price: \$${item.price.toStringAsFixed(2)}',
+                  'Price: €${item.price.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.secondary,

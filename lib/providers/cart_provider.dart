@@ -1,84 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:smart_meal/models/ingredient.dart';
 import '../models/catalog.dart';
-import '../models/food.dart';
 
 class CartProvider with ChangeNotifier {
   final List<Item> _items = [];
-  late double price = 2;
   final List<Ingredient> _ingredientItems = [];
 
   List<Item> get items => _items;
+
   List<Ingredient> get ingredients => _ingredientItems;
 
-  num get totalPrice => _items.fold(0, (sum, item) => sum + item.prices);
-  num get totalIngredientPrice => price;
+  num get totalPrice =>
+      _items.fold(0, (sum, item) => sum + (item.prices * (item.quantity ?? 1)));
 
-  void addPrice() {
-    price += 2;
-    notifyListeners();
-  }
-
-  void removePrice() {
-    price -= 2;
-    notifyListeners();
-  }
+  num get totalIngredientPrice =>
+      _ingredientItems.fold(0, (sum, ingredient) {
+        final adjustedPrice = _calculateAdjustedPrice(ingredient);
+        return sum + adjustedPrice;
+      });
 
   void addItem(Item item) {
     _items.add(item);
-    print('Item added: ${item.name}');
     notifyListeners();
   }
 
+  // Define the method to update the ingredient
+  void updateIngredientItem(int index, int newQuantity) {
+    if (index >= 0 && index < ingredients.length) {
+      ingredients[index].quantity = newQuantity;
+      notifyListeners();
+    }
+  }
+
   void addIngredientItem(Ingredient ingredient) {
+    if (ingredient.quantity <= 0) {
+      print('Error: Ingredient quantity must be greater than zero.');
+      return;
+    }
+
     _ingredientItems.add(ingredient);
-    addPrice();
     print('Ingredient added: ${ingredient.name}');
     notifyListeners();
   }
 
+  // Remove item from the list
   void removeItem(Item item) {
     _items.remove(item);
-    print('Item removed: ${item.name}');
     notifyListeners();
   }
 
   void removeIngredientItem(Ingredient ingredient) {
     _ingredientItems.remove(ingredient);
-    removePrice();
-    print('Ingredient removed: ${ingredient.name}');
     notifyListeners();
   }
 
-  // Update the quantity of an item
   void updateItemQuantity(Item item, int newQuantity) {
     final index = _items.indexOf(item);
     if (index != -1) {
-      final oldQuantity = _items[index].quantity;
       _items[index].quantity = newQuantity;
-      // Adjust price based on new quantity
-      final priceChange = (newQuantity - oldQuantity) * item.prices;
-      if (priceChange > 0) {
-        addPrice();
-      } else {
-        removePrice();
-      }
       notifyListeners();
     }
   }
 
-  // Update the quantity of an ingredient
   void updateIngredientQuantity(Ingredient ingredient, int newQuantity) {
     final index = _ingredientItems.indexOf(ingredient);
     if (index != -1) {
-      final oldQuantity = _ingredientItems[index].quantity;
       _ingredientItems[index].quantity = newQuantity;
-      if (newQuantity > 0) {
-        addPrice();
-      } else {
-        removePrice();
-      }
       notifyListeners();
     }
+  }
+
+  num _calculateAdjustedPrice(Ingredient ingredient) {
+    final pricePerUnit = ingredient.price;
+    final quantity = ingredient.quantity ?? 1;
+    final unit = ingredient.unit;
+
+    final conversionFactors = {
+      'kg': 1000,
+      'g': 1,
+      'ml': 1,
+      'L': 1000,
+    };
+
+    if (conversionFactors.containsKey(unit)) {
+      if (unit == 'g' || unit == 'ml') {
+        final adjustedPrice = (pricePerUnit / 1000) * quantity;
+        return adjustedPrice;
+      } else if (unit == 'kg' || unit == 'L') {
+        return pricePerUnit * quantity;
+      }
+    }
+    return pricePerUnit * quantity;
   }
 }

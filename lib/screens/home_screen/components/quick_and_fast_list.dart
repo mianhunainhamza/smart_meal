@@ -36,7 +36,7 @@ class QuickAndFastList extends StatelessWidget {
                 height: cardHeight,
                 child: Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: FoodCard(food: foods[index])),
+                    child: FoodCard(food: foods[index], index: index,)),
               ),
             ),
           ),

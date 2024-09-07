@@ -7,7 +7,8 @@ import '../../../models/food.dart';
 
 class FoodCard extends StatelessWidget {
   final Food food;
-  const FoodCard({super.key, required this.food});
+  final int index;
+  const FoodCard({super.key, required this.food, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class FoodCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RecipeScreen(food: food),
+                builder: (context) => RecipeScreen(food: food, index: index,),
               ),
             );
           },

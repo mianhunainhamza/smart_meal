@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/cart_provider.dart';
 
 class FoodCounter extends StatelessWidget {
   final int currentNumber;
   final Function() onAdd;
   final Function() onRemove;
   final Function(int) onUpdateNumber;
+  final int index; // Add this parameter for index in the ingredient list
 
   const FoodCounter({
     super.key,
@@ -13,6 +18,7 @@ class FoodCounter extends StatelessWidget {
     required this.onAdd,
     required this.onRemove,
     required this.onUpdateNumber,
+    required this.index, // Initialize the index
   });
 
   @override
@@ -30,7 +36,11 @@ class FoodCounter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: onRemove,
+            onPressed: () {
+              onRemove();
+              final cartProvider = context.read<CartProvider>();
+              cartProvider.updateIngredientItem(index, currentNumber - 1);
+            },
             icon: Icon(
               Iconsax.minus,
               color: Theme.of(context).colorScheme.onPrimary,
@@ -54,7 +64,12 @@ class FoodCounter extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: onAdd,
+            onPressed: () {
+              onAdd();
+              // Update quantity in CartProvider
+              final cartProvider = context.read<CartProvider>();
+              cartProvider.updateIngredientItem(index, currentNumber + 1);
+            },
             icon: Icon(
               Iconsax.add,
               color: Theme.of(context).colorScheme.tertiary,
@@ -65,7 +80,6 @@ class FoodCounter extends StatelessWidget {
     );
   }
 
-  // Method to show input dialog
   void _showInputDialog(BuildContext context) {
     TextEditingController controller = TextEditingController(text: "$currentNumber");
     showDialog(
@@ -122,6 +136,9 @@ class FoodCounter extends StatelessWidget {
                 int? newNumber = int.tryParse(controller.text);
                 if (newNumber != null && newNumber > 0) {
                   onUpdateNumber(newNumber);
+                  // Update quantity in CartProvider
+                  final cartProvider = context.read<CartProvider>();
+                  cartProvider.updateIngredientItem(index, newNumber);
                 }
                 Navigator.of(context).pop();
               },
@@ -145,5 +162,4 @@ class FoodCounter extends StatelessWidget {
       },
     );
   }
-
 }

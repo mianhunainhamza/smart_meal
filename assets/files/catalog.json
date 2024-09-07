@@ -4,7 +4,9 @@
       "id": 1,
       "name": "Organic Quinoa",
       "desc": "A nutrient-dense, gluten-free grain packed with protein and fiber. Ideal for salads and bowls.",
-      "prices": 12.49,
+      "prices": 4.49,
+      "quantity": 1,
+      "unit": "kg",
       "color": "#E0F7FA",
       "image": "assets/images/white-quinoa.png"
     },
@@ -12,7 +14,9 @@
       "id": 2,
       "name": "Almond Butter",
       "desc": "Rich in healthy fats and protein, perfect for spreading or adding to smoothies.",
-      "prices": 13.49,
+      "prices": 8.49,
+      "quantity": 1,
+      "unit": "kg",
       "color": "#FFEBEE",
       "image": "assets/images/butter.png"
     },
@@ -20,7 +24,9 @@
       "id": 3,
       "name": "Chia Seeds",
       "desc": "Loaded with antioxidants, fiber, and omega-3 fatty acids, great for pudding or smoothies.",
-      "prices": 19.99,
+      "prices": 3.99,
+      "quantity": 1,
+      "unit": "kg",
       "color": "#FFF3E0",
       "image": "assets/images/chia.png"
     },
@@ -28,23 +34,29 @@
       "id": 4,
       "name": "Greek Yogurt",
       "desc": "A high-protein, probiotic-rich snack that’s perfect for breakfast or a post-workout treat.",
-      "prices": 49.99,
+      "prices": 1.99,
       "color": "#ECEFF1",
+      "quantity": 1,
+      "unit": "l",
       "image": "assets/images/yogurt.png"
     },
     {
       "id": 5,
       "name": "Mixed Nuts",
       "desc": "A blend of almonds, walnuts, and cashews. A great source of healthy fats and protein.",
-      "prices": 19.99,
+      "prices": 2.99,
       "color": "#F1F8E9",
+      "quantity": 1,
+      "unit": "kg",
       "image": "assets/images/nuts.png"
     },
     {
       "id": 6,
       "name": "Avocado",
       "desc": "A nutrient-packed fruit rich in healthy fats, perfect for toast or salads.",
-      "prices": 39.99,
+      "prices": 2.99,
+      "quantity": 1,
+      "unit": "kg",
       "color": "#E8F5E9",
       "image": "assets/images/avocado.png"
     }
