@@ -41,7 +41,6 @@ class AddToCart extends StatelessWidget {
                 cartProvider.removeItem(catalogItem!);
               } else if (ingredient != null) {
                 cartProvider.removeIngredientItem(ingredient!);
-                cartProvider.removePrice();
               }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

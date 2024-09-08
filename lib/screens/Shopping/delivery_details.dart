@@ -166,7 +166,7 @@ class DetailsPageState extends State<DetailsPage>
                         height: 85,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Street No.',
+                            labelText: 'Street',
                             labelStyle: TextStyle(
                                 color: Theme.of(context).colorScheme.primary),
                             border: OutlineInputBorder(

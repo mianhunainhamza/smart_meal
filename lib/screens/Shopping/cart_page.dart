@@ -133,34 +133,91 @@ class CartItemRowState extends State<CartItemRow> {
   @override
   void initState() {
     super.initState();
-    _quantityController.text = widget.isItem
-        ? (widget.itemOrIngredient as Item).name.toString()
-        : (widget.itemOrIngredient as Ingredient).quantity.toString();
+    final quantity = widget.isItem
+        ? (widget.itemOrIngredient as Item).quantity
+        : (widget.itemOrIngredient as Ingredient).quantity;
+    _quantityController.text = quantity.toString();
+  }
+
+  num _calculateAdjustedPrice(dynamic itemOrIngredient) {
+    final isItem = widget.isItem;
+    final price = isItem
+        ? (itemOrIngredient as Item).prices
+        : (itemOrIngredient as Ingredient).price;
+    final quantity = isItem
+        ? (itemOrIngredient as Item).quantity
+        : (itemOrIngredient as Ingredient).quantity ?? 1;
+    final unit = isItem
+        ? (itemOrIngredient as Item).unit
+        : (itemOrIngredient as Ingredient).unit;
+
+    final conversionFactors = {
+      'kg': 1000,
+      'g': 1,
+      'ml': 1,
+      'L': 1000,
+    };
+
+    if (conversionFactors.containsKey(unit)) {
+      if (unit == 'g' || unit == 'ml') {
+        return (price / 1000) * quantity;
+      } else if (unit == 'kg' || unit == 'L') {
+        return price * quantity;
+      }
+    }
+
+    return price * quantity;
   }
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
+    final isItem = widget.isItem;
+    final name = isItem
+        ? (widget.itemOrIngredient as Item).name
+        : (widget.itemOrIngredient as Ingredient).name;
+    final quantity = isItem
+        ? (widget.itemOrIngredient as Item).quantity
+        : (widget.itemOrIngredient as Ingredient).quantity;
+    final unit = isItem
+        ? (widget.itemOrIngredient as Item).unit
+        : (widget.itemOrIngredient as Ingredient).unit;
+    final adjustedPrice = _calculateAdjustedPrice(widget.itemOrIngredient);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(_isEditing ? Icons.check : Icons.edit_sharp),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ListTile(
+          contentPadding:
+          const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          leading: IconButton(
+            icon:
+            Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.blue),
             onPressed: () {
               if (_isEditing) {
                 // Update quantity
+                final quantity = int.tryParse(_quantityController.text) ?? 0;
                 if (widget.isItem) {
                   cart.updateItemQuantity(
                     widget.itemOrIngredient as Item,
-                    int.parse(_quantityController.text),
+                    quantity,
                   );
                 } else {
                   cart.updateIngredientQuantity(
                     widget.itemOrIngredient as Ingredient,
-                    int.parse(_quantityController.text),
+                    quantity,
                   );
                 }
                 setState(() {
@@ -173,50 +230,71 @@ class CartItemRowState extends State<CartItemRow> {
               }
             },
           ),
-          Expanded(
-            child: _isEditing
-                ? TextField(
-                    controller: _quantityController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.black.withOpacity(.3))
-                      ),
-                      labelText: 'Quantity',
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      // Optionally handle changes here
-                    },
-                  )
-                : Text(
-              style: const TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                    widget.isItem
-                        ? widget.itemOrIngredient.name.toString()
-                        : "${(widget.itemOrIngredient as Ingredient).name} ${(widget.itemOrIngredient as Ingredient).quantity}${(widget.itemOrIngredient as Ingredient).unit}",
-                  ),
+          title: Text(
+            name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.remove_circle_outline),
-            onPressed: () {
-              if (widget.isItem) {
-                cart.removeItem(widget.itemOrIngredient);
-              } else {
-                cart.removeIngredientItem(
-                    widget.itemOrIngredient as Ingredient);
-              }
-
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(
-              //     content: const Text('Item has been removed'),
-              //     backgroundColor: Theme.of(context).colorScheme.primary,
-              //   ),
-              // );
-            },
+          subtitle: _isEditing
+              ? Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: SizedBox(
+              height: 50,
+              child: TextField(
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.black.withOpacity(.2))),
+                  labelText: 'Quantity',
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.black.withOpacity(.1))),
+                ),
+              ),
+            ),
+          )
+              : Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              'Qty: $quantity $unit',
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+            ),
           ),
-        ],
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '€${adjustedPrice.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.green,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.remove_circle_outline,
+                    color: Colors.red),
+                onPressed: () {
+                  if (widget.isItem) {
+                    cart.removeItem(widget.itemOrIngredient);
+                  } else {
+                    cart.removeIngredientItem(
+                        widget.itemOrIngredient as Ingredient);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
+
