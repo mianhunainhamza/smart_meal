@@ -8,7 +8,7 @@
       "quantity": 1,
       "unit": "kg",
       "color": "#E0F7FA",
-      "image": "assets/images/white-quinoa.png"
+      "image": "assets/images/quinoa.png"
     },
     {
       "id": 2,
@@ -18,7 +18,7 @@
       "quantity": 1,
       "unit": "kg",
       "color": "#FFEBEE",
-      "image": "assets/images/butter.png"
+      "image": "assets/images/butters.png"
     },
     {
       "id": 3,
@@ -48,7 +48,7 @@
       "color": "#F1F8E9",
       "quantity": 1,
       "unit": "kg",
-      "image": "assets/images/nuts.png"
+      "image": "assets/images/mixed-nuts.png"
     },
     {
       "id": 6,

@@ -8,7 +8,7 @@ class CatalogImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      width: MediaQuery.of(context).size.width * 0.4, // Equivalent to .w40(context)
+      width: MediaQuery.of(context).size.width * 0.32,
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(8.0),

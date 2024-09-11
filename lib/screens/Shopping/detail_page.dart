@@ -54,7 +54,7 @@ class DetailPage extends StatelessWidget {
               tag: Key(catalog.id.toString()),
               child: SizedBox(
                 width: double.infinity,
-                height: Get.height * .3,
+                height: Get.height * .25,
                 child: Image.asset(
                   catalog.image,
                   fit: BoxFit.contain,
