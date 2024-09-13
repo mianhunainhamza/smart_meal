@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/catalog.dart';
 import '../../models/ingredient.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/inventory_provider.dart';
 import 'delivery_details.dart';
 
 class CartPage extends StatelessWidget {
@@ -184,117 +185,192 @@ class CartItemRowState extends State<CartItemRow> {
         : (widget.itemOrIngredient as Ingredient).unit;
     final adjustedPrice = _calculateAdjustedPrice(widget.itemOrIngredient);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+    return Dismissible(
+      key: Key(widget.itemOrIngredient.hashCode.toString()),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        if (widget.isItem) {
+          cart.removeItem(widget.itemOrIngredient as Item);
+        } else {
+          cart.removeIngredientItem(widget.itemOrIngredient as Ingredient);
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 1),
+            content: Text(
+              '${name} removed from cart',
+              style: const TextStyle(color: Colors.black),
             ),
-          ],
-        ),
-        child: ListTile(
-          contentPadding:
-          const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          leading: IconButton(
-            icon:
-            Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.blue),
-            onPressed: () {
-              if (_isEditing) {
-                // Update quantity
-                final quantity = int.tryParse(_quantityController.text) ?? 0;
-                if (widget.isItem) {
-                  cart.updateItemQuantity(
-                    widget.itemOrIngredient as Item,
-                    quantity,
-                  );
-                } else {
-                  cart.updateIngredientQuantity(
-                    widget.itemOrIngredient as Ingredient,
-                    quantity,
-                  );
-                }
-                setState(() {
-                  _isEditing = false;
-                });
-              } else {
-                setState(() {
-                  _isEditing = true;
-                });
-              }
-            },
+            backgroundColor: Colors.white,
           ),
-          title: Text(
-            name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          subtitle: _isEditing
-              ? Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: SizedBox(
-              height: 50,
-              child: TextField(
-                controller: _quantityController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.black.withOpacity(.2))),
-                  labelText: 'Quantity',
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.black.withOpacity(.1))),
-                ),
-              ),
-            ),
-          )
-              : Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Text(
-              'Qty: $quantity $unit',
-              style: const TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '€${adjustedPrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.green,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.remove_circle_outline,
-                    color: Colors.red),
-                onPressed: () {
-                  if (widget.isItem) {
-                    cart.removeItem(widget.itemOrIngredient);
-                  } else {
-                    cart.removeIngredientItem(
-                        widget.itemOrIngredient as Ingredient);
-                  }
-                },
+        );
+      },
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
               ),
             ],
+          ),
+          child: ListTile(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            leading: IconButton(
+              icon: Icon(_isEditing ? Icons.check : Icons.edit,
+                  color: Colors.blue),
+              onPressed: () {
+                if (_isEditing) {
+                  // Update quantity
+                  final quantity = int.tryParse(_quantityController.text) ?? 0;
+                  if (widget.isItem) {
+                    cart.updateItemQuantity(
+                      widget.itemOrIngredient as Item,
+                      quantity,
+                    );
+                  } else {
+                    cart.updateIngredientQuantity(
+                      widget.itemOrIngredient as Ingredient,
+                      quantity,
+                    );
+                  }
+                  setState(() {
+                    _isEditing = false;
+                  });
+                } else {
+                  setState(() {
+                    _isEditing = true;
+                  });
+                }
+              },
+            ),
+            title: Text(
+              name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            subtitle: _isEditing
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: SizedBox(
+                      height: 50,
+                      child: TextField(
+                        controller: _quantityController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.black.withOpacity(.2))),
+                          labelText: 'Quantity',
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.black.withOpacity(.1))),
+                        ),
+                      ),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Qty: $quantity $unit',
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon:
+                      const Icon(Icons.add_circle_outline, color: Colors.green),
+                  onPressed: () {
+                    final inventoryProvider = context.read<InventoryProvider>();
+
+                    if (widget.isItem) {
+                      final item = widget.itemOrIngredient as Item;
+                      inventoryProvider.updateInventoryFromItem(item);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(milliseconds: 700),
+                          content: const Text('Added to the inventory'),
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
+                    } else {
+                      final ingredient = widget.itemOrIngredient as Ingredient;
+                      inventoryProvider
+                          .updateInventoryFromIngredient(ingredient);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(milliseconds: 700),
+                          content: const Text('Added to the inventory'),
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                Text(
+                  '€${adjustedPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.green,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle_outline,
+                      color: Colors.red),
+                  onPressed: () {
+                    final currentQuantity = widget.isItem
+                        ? (widget.itemOrIngredient as Item).quantity
+                        : (widget.itemOrIngredient as Ingredient).quantity ?? 1;
+
+                    if (currentQuantity > 1) {
+                      // Decrease the quantity
+                      setState(() {
+                        if (widget.isItem) {
+                          cart.updateItemQuantity(
+                              widget.itemOrIngredient as Item,
+                              currentQuantity - 1);
+                        } else {
+                          cart.updateIngredientQuantity(
+                              widget.itemOrIngredient as Ingredient,
+                              currentQuantity - 1);
+                        }
+                      });
+                    } else {
+                      if (widget.isItem) {
+                        cart.removeItem(widget.itemOrIngredient as Item);
+                      } else {
+                        cart.removeIngredientItem(
+                            widget.itemOrIngredient as Ingredient);
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-

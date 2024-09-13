@@ -143,7 +143,7 @@ class _QuickFoodsScreenState extends State<QuickFoodsScreen> {
         return _selectedIngredients.every((ingredient) {
           final lowerCaseIngredient = ingredient.toLowerCase();
           return food.ingredients.any((foodIngredient) {
-            final ingredientName = foodIngredient.name.toLowerCase(); // Updated to use the Ingredient model's property
+            final ingredientName = foodIngredient.name.toLowerCase();
             return ingredientName.contains(lowerCaseIngredient);
           });
         });

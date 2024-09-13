@@ -30,6 +30,18 @@ class _RecipeScreenState extends State<RecipeScreen> {
     return '$adjustedQuantity';
   }
 
+  bool areIngredientsAvailable(Food food, int currentNumber) {
+    final inventoryProvider = Provider.of<InventoryProvider>(context, listen: false);
+
+    for (final ingredient in food.ingredients) {
+      if (!inventoryProvider.isItemAvailable(ingredient.name, ingredient.quantity * currentNumber)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   void addAllIngredientsToCart() {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final inventoryProvider =
@@ -38,33 +50,27 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     bool allMissingInCart = true;
 
-    // Track ingredients to be removed
     final ingredientsToRemove = <Ingredient>{};
 
-    // First, identify which ingredients are missing in the cart and which are available
     for (var ingredient in ingredients) {
       final requiredQuantity = ingredient.quantity * currentNumber;
       final isAvailable =
           inventoryProvider.isItemAvailable(ingredient.name, requiredQuantity);
 
       if (isAvailable) {
-        // If item is available, mark it for removal if it's in the cart
         if (cartProvider.ingredients.contains(ingredient)) {
           ingredientsToRemove.add(ingredient);
         }
         allMissingInCart = false;
       } else {
-        // Add missing items to the cart
         if (!cartProvider.ingredients.contains(ingredient)) {
           cartProvider.addIngredientItem(ingredient);
         }
       }
     }
 
-    // Remove ingredients that are available in the inventory but in the cart
     if (!allMissingInCart) {
       for (var ingredient in ingredientsToRemove) {
-        // Remove each ingredient from the cart
         cartProvider.removeIngredientItem(ingredient);
       }
     }
@@ -75,7 +81,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
     final cartProvider = Provider.of<CartProvider>(context);
     final inventoryProvider = Provider.of<InventoryProvider>(context);
     final ingredients = widget.food.ingredients;
-    bool allInCart = ingredients
+    ingredients
         .every((ingredient) => cartProvider.ingredients.contains(ingredient));
 
     return Scaffold(
@@ -363,7 +369,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       ),
                     ],
                   ),
-                  Row(
+                  areIngredientsAvailable(widget.food, currentNumber) ? Row() :Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
@@ -384,8 +390,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                               child: Row(
                                 children: [
                                   const SizedBox(height: 8),
-                                  Text(
-                                    'Add Missing',
+                                 Text(
+                                   'Add Missing',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context)

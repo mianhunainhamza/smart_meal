@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import '../models/catalog.dart';
 import '../models/food.dart';
+import '../models/ingredient.dart';
 import '../models/inventory_item.dart';
 
 class InventoryProvider extends ChangeNotifier {
-  String selectedCategory = 'All'; // Default category
+  String selectedCategory = 'All';
 
   List<String> categories = ['All', 'Fruits', 'Vegetables', 'Dairy']; // Predefined categories
 
@@ -17,6 +19,30 @@ class InventoryProvider extends ChangeNotifier {
       quantity: 10,
       price: 1.50,
       details: 'Fresh and organic', category: 'Fruits',
+    ),InventoryItem(
+      name: 'Bread',
+      image: 'assets/images/white-bread.png',
+      dateAdded: '10-12-2024',
+      expiryDate: '20-12-2024',
+      quantity: 4,
+      price: 1.50,
+      details: 'Fresh and organic', category: 'Dairy',
+    ),InventoryItem(
+      name: 'Milk',
+      image: 'assets/images/milks.png',
+      dateAdded: '10-12-2024',
+      expiryDate: '20-12-2024',
+      quantity: 100,
+      price: 1.50,
+      details: 'Fresh and organic', category: 'Dairy',
+    ),InventoryItem(
+      name: 'Sugar',
+      image: 'assets/images/sugar.png',
+      dateAdded: '10-12-2024',
+      expiryDate: '20-12-2024',
+      quantity: 20,
+      price: 1.50,
+      details: 'Fresh and organic', category: 'Dairy',
     ),
     InventoryItem(
       name: 'Banana',
@@ -57,7 +83,6 @@ class InventoryProvider extends ChangeNotifier {
     ),
   ];
 
-// Check if an item is available in the inventory and has enough quantity
   bool isItemAvailable(String itemName, int requiredQuantity) {
     final item = inventory.firstWhereOrNull(
           (item) => item.name.toLowerCase() == itemName.toLowerCase(),
@@ -100,6 +125,58 @@ class InventoryProvider extends ChangeNotifier {
     if (index != -1) {
       inventory[index] = newItem;
       notifyListeners();
+    }
+  }
+
+  void updateInventoryFromItem(Item item) {
+    final existingItem = inventory.firstWhereOrNull((i) => i.name == item.name);
+
+    final todayDate = DateTime.now();
+    final expiryDate = todayDate.add(const Duration(days: 10));
+    final formattedTodayDate = "${todayDate.day}-${todayDate.month}-${todayDate.year}";
+    final formattedExpiryDate = "${expiryDate.day}-${expiryDate.month}-${expiryDate.year}";
+
+    if (existingItem != null) {
+      final newQuantity = existingItem.quantity + item.quantity;
+      final updatedItem = existingItem.copyWith(quantity: newQuantity);
+      updateItem(existingItem, updatedItem);
+    } else {
+      final newItem = InventoryItem(
+        name: item.name,
+        image: item.image,
+        dateAdded: formattedTodayDate,
+        expiryDate: formattedExpiryDate,
+        quantity: item.quantity,
+        price: item.prices,
+        category: 'Dairy',
+      );
+      addItem(newItem);
+    }
+  }
+
+  void updateInventoryFromIngredient(Ingredient ingredient) {
+    final existingItem = inventory.firstWhereOrNull((i) => i.name == ingredient.name);
+
+    final todayDate = DateTime.now();
+    final expiryDate = todayDate.add(const Duration(days: 10));
+    final formattedTodayDate = "${todayDate.day}-${todayDate.month}-${todayDate.year}";
+    final formattedExpiryDate = "${expiryDate.day}-${expiryDate.month}-${expiryDate.year}";
+
+    if (existingItem != null) {
+      final newQuantity = existingItem.quantity! + ingredient.quantity;
+      final updatedItem = existingItem.copyWith(quantity: newQuantity);
+      updateItem(existingItem, updatedItem);
+    } else {
+      final newItem = InventoryItem(
+        name: ingredient.name,
+        image: ingredient.image,
+        dateAdded: formattedTodayDate,
+        expiryDate: formattedExpiryDate,
+        quantity: ingredient.quantity,
+        price: ingredient.price,
+        category: 'Dairy',
+      );
+      addItem(newItem);
     }
   }
 
