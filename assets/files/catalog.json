@@ -49,16 +49,6 @@
       "quantity": 1,
       "unit": "kg",
       "image": "assets/images/mixed-nuts.png"
-    },
-    {
-      "id": 6,
-      "name": "Avocado",
-      "desc": "A nutrient-packed fruit rich in healthy fats, perfect for toast or salads.",
-      "prices": 2.99,
-      "quantity": 1,
-      "unit": "kg",
-      "color": "#E8F5E9",
-      "image": "assets/images/avocado.png"
     }
   ]
 }

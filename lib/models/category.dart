@@ -3,4 +3,5 @@ const catgories = [
   "Breakfast",
   "Lunch",
   "Dinner",
+  "Leftover Recipes"
 ];

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:smart_meal/screens/shopping/cart_page.dart';
 import 'package:smart_meal/screens/shopping/components/add_to_cart.dart';
 import 'package:smart_meal/widgets/custom_button.dart';
 import 'package:smart_meal/widgets/custom_floating_button.dart';
@@ -33,20 +32,40 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
   void addAllIngredientsToCart() {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final inventoryProvider =
+        Provider.of<InventoryProvider>(context, listen: false);
     final ingredients = widget.food.ingredients;
 
-    bool allInCart = ingredients
-        .every((ingredient) => cartProvider.ingredients.contains(ingredient));
+    bool allMissingInCart = true;
 
-    if (allInCart) {
-      for (var ingredient in ingredients) {
-        cartProvider.removeIngredientItem(ingredient);
-      }
-    } else {
-      for (var ingredient in ingredients) {
+    // Track ingredients to be removed
+    final ingredientsToRemove = <Ingredient>{};
+
+    // First, identify which ingredients are missing in the cart and which are available
+    for (var ingredient in ingredients) {
+      final requiredQuantity = ingredient.quantity * currentNumber;
+      final isAvailable =
+          inventoryProvider.isItemAvailable(ingredient.name, requiredQuantity);
+
+      if (isAvailable) {
+        // If item is available, mark it for removal if it's in the cart
+        if (cartProvider.ingredients.contains(ingredient)) {
+          ingredientsToRemove.add(ingredient);
+        }
+        allMissingInCart = false;
+      } else {
+        // Add missing items to the cart
         if (!cartProvider.ingredients.contains(ingredient)) {
           cartProvider.addIngredientItem(ingredient);
         }
+      }
+    }
+
+    // Remove ingredients that are available in the inventory but in the cart
+    if (!allMissingInCart) {
+      for (var ingredient in ingredientsToRemove) {
+        // Remove each ingredient from the cart
+        cartProvider.removeIngredientItem(ingredient);
       }
     }
   }
@@ -350,43 +369,39 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              addAllIngredientsToCart();
-                            },
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  allInCart ? 'Remove' : 'Add Missing',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withOpacity(.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                addAllIngredientsToCart();
+                              },
+                              child: Row(
+                                children: [
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Add Missing',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Icon(
+                                    Icons.check,
                                     color:
                                         Theme.of(context).colorScheme.onPrimary,
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Icon(
-                                  allInCart
-                                      ? Iconsax.close_square
-                                      : Icons.check,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                                ],
+                              ),
+                            )),
                       ),
                     ],
                   ),
